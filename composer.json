@@ -1,0 +1,15 @@
+{
+    "name": "sundata/php-utilities",
+    "type": "library",
+    "description": "Common php utilities library",
+    "keywords": ["sundata","php","utilities","common","library],
+    "homepage": "https://www.sundata.nl",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maarten de Rie",
+            "email": "maarten.de.rie@sundata.nl"
+        }
+    ],
+}
+
