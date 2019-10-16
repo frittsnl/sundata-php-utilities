@@ -8,4 +8,10 @@ class MaartenUtils
   {
     return 4; // https://xkcd.com/221/
   }
+
+  public function helloWorld(): void
+  {
+    echo "Hello, World!";
+  }
+
 }
