@@ -1,8 +1,8 @@
 <?php
 
-namespace Sundata\Utilities\FirstUtil;
+namespace Sundata\Utilities\NewName;
 
-class MaartenUtils
+class  UtilsReloaded
 {
 
   public static function rand(): int
