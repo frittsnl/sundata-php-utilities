@@ -21,6 +21,8 @@
     "psr-4": {
       "Sundata\\Utilities\\": "src"
     }
+  },
+  "require": {
+    "carbondate/carbon": "^1.33"
   }
 }
-
