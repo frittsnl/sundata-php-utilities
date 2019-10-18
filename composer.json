@@ -19,7 +19,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Sundata\\Utilities": "src"
+      "Sundata\\Utilities\\": "src"
     }
   }
 }
