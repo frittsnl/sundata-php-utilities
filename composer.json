@@ -23,6 +23,6 @@
     }
   },
   "require": {
-    "carbondate/carbon": "^2.0"
+    "nestbot/carbon": "^2.0"
   }
 }
