@@ -23,6 +23,6 @@
     }
   },
   "require": {
-    "carbondate/carbon": "^1.33"
+    "carbondate/carbon": "^2.17.1"
   }
 }
