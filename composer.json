@@ -16,6 +16,11 @@
       "name": "Maarten de Rie",
       "email": "maarten.de.rie@sundata.nl"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "Sundata\\Utilities": "src"
+    }
+  }
 }
 

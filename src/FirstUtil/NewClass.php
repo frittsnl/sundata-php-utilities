@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Sundata\Utilities\NewName;
+namespace Sundata\Utilities\FirstName;
 
 
 class NewClass
