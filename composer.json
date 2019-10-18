@@ -23,6 +23,6 @@
     }
   },
   "require": {
-    "nestbot/carbon": "^2.0"
+    "nesbot/carbon": "^2.0"
   }
 }
