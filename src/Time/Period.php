@@ -1,6 +1,6 @@
 <?php
 
-namespace Sundate\Utilities\Time;
+namespace Sundata\Utilities\Time;
 
 class Period
 {

@@ -17,12 +17,24 @@
       "email": "maarten.de.rie@sundata.nl"
     }
   ],
+  "require": {
+    "php" : "^7.2.3",
+    "nesbot/carbon": "^2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0|^8.0"
+  },
   "autoload": {
     "psr-4": {
       "Sundata\\Utilities\\": "src"
     }
   },
-  "require": {
-    "nesbot/carbon": "^2.0"
+  "autoload-dev": {
+    "psr-4": {
+      "Sundata\\Utilities\\Test\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
   }
 }

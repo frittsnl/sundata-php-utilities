@@ -3,7 +3,6 @@
 namespace Sundata\Utilities\Time;
 
 use Carbon\Carbon;
-use Sundate\Utilities\Time\Period;
 
 /**
  * Class DataArraySerializer
