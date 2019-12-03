@@ -2,151 +2,75 @@
 
 namespace Sundata\Utilities\Time;
 
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 
-/**
- * Class DataArraySerializer
- *
- * This class is a subclass of ArraySerializer which removes the 'data'
- * resource key from the json array.
- *
- * @package App\Infrastructure\Support
- */
 class DateSplitter
 {
   /**
-   * Get the collection array without the prefixed resource key 'data'.
+   * Splits a start-end period in periods. Takes the timezones into account.
+   * Don't use for periodType smaller than 'hour'
    *
-   * @param Carbon $startDate
-   * @param Carbon $endDate
+   * @param CarbonInterface $startDate
+   * @param CarbonInterface $endDate
    * @param string $periodType
    * @return array
    */
-  public function split($startDate, $endDate, $periodType)
+  public static function split(CarbonInterface $startDate, CarbonInterface $endDate, string $periodType)
   {
-    switch ($periodType) {
-      case 'year':
-        return $this->splitInYears($startDate, $endDate);
-      case 'month':
-        return $this->splitInMonths($startDate, $endDate);
-      case 'week':
-        return $this->splitInWeeks($startDate, $endDate);
-      case 'day':
-        return $this->splitInDays($startDate, $endDate);
-      case 'hour':
-      default:
-        return $this->splitInHours($startDate, $endDate);
-    }
-  }
+    DateSplitter::assertSupportedPeriodType($periodType);
+    DateSplitter::assertStartBeforeOrEqualToEnd($startDate, $endDate);
+    $next = $startDate->toImmutable();
+    $endDate = $endDate->toImmutable();
 
-  public function splitInYears($startDate, $endDate)
-  {
-    $nextStart = $startDate;
-
-    while ($nextStart <= $endDate) {
-
-      $endInPeriod = $nextStart->copy()->endOfYear();
-
-      if ($endDate < $endInPeriod) {
-        $endInPeriod = $endDate;
-      }
-
-      $newPeriod = new Period($nextStart, $endInPeriod);
-
-      $periods[] = $newPeriod;
-
-      $nextStart = $nextStart->copy()->endOfYear()->addDay()->startOfDay();
+    if ($startDate->eq($endDate)) {
+      return [new Period($startDate->copy(), $endDate)];
     }
 
+    while ($next->isBefore($endDate)) {
+      // Carbon->endOf gives the incl boundary, hence use ceiling to obtain excl boundary
+      $nextEnd = $next->endOf($periodType)->ceil('minutes')->min($endDate);
+      $periods[] = new Period($next, $nextEnd);
+      $next = $nextEnd;
+    }
     return $periods;
   }
 
-  public function splitInMonths($startDate, $endDate)
+  private static function assertStartBeforeOrEqualToEnd(CarbonInterface $startDate, CarbonInterface $endDate)
   {
-    $nextStart = $startDate;
-
-    while ($nextStart <= $endDate) {
-
-      $endInPeriod = $nextStart->copy()->endOfMonth();
-
-      if ($endDate < $endInPeriod) {
-        $endInPeriod = $endDate;
-      }
-
-      $newPeriod = new Period($nextStart, $endInPeriod);
-
-      $periods[] = $newPeriod;
-
-      $nextStart = $nextStart->copy()->endOfMonth()->addDay()->startOfDay();
+    if ($endDate->isBefore($startDate)) {
+      throw new \InvalidArgumentException("endDate can't be before startDate.");
     }
-
-    return $periods;
   }
 
-  public function splitInWeeks($startDate, $endDate)
+  private static function assertSupportedPeriodType(string $periodType)
   {
-    $nextStart = $startDate;
-
-    while ($nextStart <= $endDate) {
-
-      $endInPeriod = $nextStart->copy()->endOfWeek();
-
-      if ($endDate < $endInPeriod) {
-        $endInPeriod = $endDate;
-      }
-
-      $newPeriod = new Period($nextStart, $endInPeriod);
-
-      $periods[] = $newPeriod;
-
-      $nextStart = $nextStart->copy()->endOfWeek()->addDay()->startOfDay();
+    if (!in_array($periodType, ['year', 'month', 'week', 'day', 'hour'])) {
+      throw new \InvalidArgumentException("Unsupported periodType: " . $periodType);
     }
-
-    return $periods;
   }
 
-  public function splitInDays($startDate, $endDate)
+  public static function splitInYears(CarbonInterface $startDate, CarbonInterface $endDate)
   {
-    $nextStart = $startDate;
-
-    while ($nextStart <= $endDate) {
-
-      $endInPeriod = $nextStart->copy()->endOfDay();
-
-      if ($endDate < $endInPeriod) {
-        $endInPeriod = $endDate;
-      }
-
-      $newPeriod = new Period($nextStart, $endInPeriod);
-
-      $periods[] = $newPeriod;
-
-      $nextStart = $nextStart->copy()->endOfDay()->addDay()->startOfDay();
-    }
-
-    return $periods;
+    return self::split($startDate, $endDate, 'year');
   }
 
-  public function splitInHours($startDate, $endDate)
+  public static function splitInMonths(CarbonInterface $startDate, CarbonInterface $endDate)
   {
+    return self::split($startDate, $endDate, 'month');
+  }
 
-    $nextStart = $startDate;
+  public static function splitInWeeks(CarbonInterface $startDate, CarbonInterface $endDate)
+  {
+    return self::split($startDate, $endDate, 'week');
+  }
 
-    while ($nextStart < $endDate) {
-      $endInPeriod = $nextStart->copy()->endOfHour();
+  public static function splitInDays(CarbonInterface $startDate, CarbonInterface $endDate)
+  {
+    return self::split($startDate, $endDate, 'day');
+  }
 
-      // If the generated end time is larger then the actual end date, use the original one.
-      if ($endInPeriod > $endDate) {
-        $endInPeriod = $endDate;
-      }
-
-      $newPeriod = new Period($nextStart, $endInPeriod);
-
-      $periods[] = $newPeriod;
-
-      $nextStart = $nextStart->copy()->addHour()->startOfHour();
-    }
-
-    return $periods;
+  public static function splitInHours(CarbonInterface $startDate, CarbonInterface $endDate)
+  {
+    return self::split($startDate, $endDate, 'hour');
   }
 }

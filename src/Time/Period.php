@@ -2,19 +2,30 @@
 
 namespace Sundata\Utilities\Time;
 
+use Carbon\CarbonInterface;
+
 class Period
 {
-    public $startDate;
-    public $endDate;
+  public $startDate;
+  public $endDate;
 
-    /**
-     * @var Carbon $startDate
-     * @var Carbon $endDate
-     */
-    public function __construct($startDate, $endDate)
-    {
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
-    }
+  /**
+   * @param CarbonInterface $startDate
+   * @param CarbonInterface $endDate
+   */
+  public function __construct(CarbonInterface $startDate, CarbonInterface $endDate)
+  {
+    $this->startDate = $startDate;
+    $this->endDate = $endDate;
+  }
 
+  public function getStart()
+  {
+    return $this->startDate;
+  }
+
+  public function getEnd()
+  {
+    return $this->endDate;
+  }
 }

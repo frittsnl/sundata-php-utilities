@@ -1,5 +1,8 @@
-# sundata-php-utilities
+# Sundata-php-utilities
 Common php utilities library
 
-# installation
+# Installation
 composer require sundata/php-utilities
+
+# New Version
+git tag vX.Y.Z
