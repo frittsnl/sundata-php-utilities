@@ -1,8 +1,14 @@
 # Sundata-php-utilities
 Common php utilities library
 
-# Installation
-composer require sundata/php-utilities
+https://packagist.org/packages/sundata/php-utilities
 
-# New Version
-git tag vX.Y.Z
+### Installation
+`composer require sundata/php-utilities`
+
+`phpunit`
+
+### New Version
+`git tag vX.Y.Z`
+
+`git push origin vX.Y.Z`
