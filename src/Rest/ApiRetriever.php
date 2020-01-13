@@ -31,6 +31,7 @@ abstract class ApiRetriever
 
     protected function apiCall(string $verb, $url, $payload = []): string
     {
+      Log::debug("$verb on $url w payload: $payload");
         try {
             $response = (new Client())->request(
                 $verb,

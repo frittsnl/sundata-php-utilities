@@ -9,8 +9,7 @@
     "common",
     "library"
   ],
-  "homepage": "https://www.sundata.nl",
-  "license": "MIT",
+  "homepage": "https://github.com/frittsnl/sundata-php-utilities",
   "authors": [
     {
       "name": "Maarten de Rie",

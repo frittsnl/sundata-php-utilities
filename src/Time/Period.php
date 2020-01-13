@@ -28,4 +28,9 @@ class Period
   {
     return $this->endDate;
   }
+
+  public function toString()
+  {
+    return "Period[{$this->getStart()->toRfc3339String()};{$this->getEnd()->toRfc3339String()}]";
+  }
 }
