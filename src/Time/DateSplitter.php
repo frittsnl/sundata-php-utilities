@@ -73,4 +73,34 @@ class DateSplitter
   {
     return self::split($startDate, $endDate, 'hour');
   }
+
+  public static function splitPeriod(Period $period, string $periodType)
+  {
+    return self::split($period->startDate, $period->endDate, $periodType);
+  }
+
+  public static function splitPeriodInYears(Period $period)
+  {
+    return self::split($period->startDate, $period->endDate, 'year');
+  }
+
+  public static function splitPeriodInMonths(Period $period)
+  {
+    return self::split($period->startDate, $period->endDate, 'month');
+  }
+
+  public static function splitPeriodInWeeks(Period $period)
+  {
+    return self::split($period->startDate, $period->endDate, 'week');
+  }
+
+  public static function splitPeriodInDays(Period $period)
+  {
+    return self::split($period->startDate, $period->endDate, 'day');
+  }
+
+  public static function splitPeriodInHours(Period $period)
+  {
+    return self::split($period->startDate, $period->endDate, 'hour');
+  }
 }

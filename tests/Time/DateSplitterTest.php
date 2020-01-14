@@ -49,7 +49,7 @@ class DateSplitterTest extends TestCase
   /** @dataProvider hourSplitDataProvider */
   public function testHourSplit($start, $end, $expectedPeriodsArray)
   {
-    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInHours');
+    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInHours','splitPeriodInHours');
   }
 
 
@@ -67,7 +67,7 @@ class DateSplitterTest extends TestCase
   /** @dataProvider daySplitDataProvider */
   public function testDaySplit($start, $end, $expectedPeriodsArray)
   {
-    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInDays');
+    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInDays','splitPeriodInDays');
   }
 
   public function weekSplitDataProvider()
@@ -86,7 +86,7 @@ class DateSplitterTest extends TestCase
   /** @dataProvider weekSplitDataProvider */
   public function testWeekSplit($start, $end, $expectedPeriodsArray)
   {
-    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInWeeks');
+    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInWeeks','splitPeriodInWeeks');
   }
 
 
@@ -106,7 +106,7 @@ class DateSplitterTest extends TestCase
   /** @dataProvider monthSplitDataProvider */
   public function testMonthSplit($start, $end, $expectedPeriodsArray)
   {
-    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInMonths');
+    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInMonths','splitPeriodInMonths');
   }
 
   public function yearSplitDataProvider()
@@ -137,10 +137,10 @@ class DateSplitterTest extends TestCase
   /** @dataProvider yearSplitDataProvider */
   public function testYearSplit($start, $end, $expectedPeriodsArray)
   {
-    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInYears');
+    $this->assertSplit($start, $end, $expectedPeriodsArray, 'splitInYears', 'splitPeriodInYears');
   }
 
-  private function assertSplit($start, $end, $expectedPeriodsArray, string $methodName): void
+  private function assertSplit($start, $end, $expectedPeriodsArray, string $methodName, string $methodNamePeriod): void
   {
     $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
     $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
@@ -154,6 +154,9 @@ class DateSplitterTest extends TestCase
     }
 
     $period = DateSplitter::$methodName($start, $end);
+    $this->assertEquals($expectedPeriods, $period);
+
+    $period = DateSplitter::$methodNamePeriod(new Period($start, $end));
     $this->assertEquals($expectedPeriods, $period);
   }
 }
