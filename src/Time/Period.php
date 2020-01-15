@@ -29,7 +29,16 @@ class Period
     return $this->endDate;
   }
 
+  /**
+   * @return string
+   * @deprecated
+   */
   public function toString()
+  {
+    return "Period[{$this->getStart()->toRfc3339String()};{$this->getEnd()->toRfc3339String()}]";
+  }
+
+  function __toString()
   {
     return "Period[{$this->getStart()->toRfc3339String()};{$this->getEnd()->toRfc3339String()}]";
   }
