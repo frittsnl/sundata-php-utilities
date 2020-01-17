@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
-abstract class ApiRetriever
+class ApiRetriever
 {
   /** @var string */
   private $name;
