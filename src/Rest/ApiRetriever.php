@@ -24,30 +24,35 @@ class ApiRetriever
         $this->name = $name;
     }
 
-    public function restGet($url, $fullResponse = false)
+    public function restGet($url, $options = [], $fullResponse = false)
     {
-        $response = $this->apiCall('GET', $url);
+        $response = $this->apiCall('GET', $url, [], $options);
         return $fullResponse ? $response : $response->getBody()->getContents();
     }
 
-    public function restPost($url, $payload, $fullResponse = false)
+    public function restPost($url, $payload, $options = [], $fullResponse = false)
     {
-        $response = $this->apiCall('POST', $url, $payload);
+        $response = $this->apiCall('POST', $url, $payload, $options);
         return $fullResponse ? $response : $response->getBody()->getContents();
     }
 
-    public function apiCall(string $verb, $url, $payload = []) : ResponseInterface
+    public function apiCall(string $verb, $url, $payload = [], $options = []) : ResponseInterface
     {
-        Log::debug("$verb on $url w payload: " . json_encode($payload));
+        Log::debug("$verb on $url w payload: " . json_encode($payload) . ' and options: ' . json_encode($options));
+
+        $defaultOptions = [
+            'headers' => [],
+            'exceptions' => false,
+            'json' => $payload
+        ];
+
+        $options = array_merge($defaultOptions, $options);
+
         try {
             $response = (new Client())->request(
                 $verb,
                 $url,
-                [
-                    'headers' => [],
-                    'exceptions' => false,
-                    'json' => $payload
-                ]
+                $options
             );
 
         } catch (GuzzleException $e) {
