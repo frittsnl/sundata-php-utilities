@@ -7,6 +7,7 @@ namespace Sundata\Utilities\Rest;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
+use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
 class ApiRetriever
@@ -14,24 +15,28 @@ class ApiRetriever
     /** @var string */
     private $name;
 
-    public function __construct(string $name)
+    /**
+     * ApiRetriever constructor.
+     * @param string $name For logging purposes. Default is 'ApiRetriever'
+     */
+    public function __construct(string $name = "ApiRetriever")
     {
         $this->name = $name;
     }
 
-    protected function restGet($url, $fullResponse = false)
+    public function restGet($url, $fullResponse = false)
     {
         $response = $this->apiCall('GET', $url);
         return $fullResponse ? $response : $response->getBody();
     }
 
-    protected function restPost($url, $payload, $fullResponse = false)
+    public function restPost($url, $payload, $fullResponse = false)
     {
         $response = $this->apiCall('POST', $url, $payload);
         return $fullResponse ? $response : $response->getBody();
     }
 
-    protected function apiCall(string $verb, $url, $payload = []): string
+    public function apiCall(string $verb, $url, $payload = []) : ResponseInterface
     {
         Log::debug("$verb on $url w payload: " . json_encode($payload));
         try {
