@@ -27,13 +27,13 @@ class ApiRetriever
     public function restGet($url, $fullResponse = false)
     {
         $response = $this->apiCall('GET', $url);
-        return $fullResponse ? $response : $response->getBody();
+        return $fullResponse ? $response : $response->getBody()->getContents();
     }
 
     public function restPost($url, $payload, $fullResponse = false)
     {
         $response = $this->apiCall('POST', $url, $payload);
-        return $fullResponse ? $response : $response->getBody();
+        return $fullResponse ? $response : $response->getBody()->getContents();
     }
 
     public function apiCall(string $verb, $url, $payload = []) : ResponseInterface
