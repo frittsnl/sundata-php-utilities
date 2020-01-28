@@ -36,7 +36,7 @@ class ApiRetriever
         return $fullResponse ? $response : $response->getBody()->getContents();
     }
 
-    public function apiCall(string $verb, $url, $payload = [], $options = []) : ResponseInterface
+    public function apiCall(string $verb, $url, $payload = [], $options = []): ResponseInterface
     {
         Log::debug("$verb on $url w payload: " . json_encode($payload) . ' and options: ' . json_encode($options));
 
@@ -56,19 +56,19 @@ class ApiRetriever
             );
 
         } catch (GuzzleException $e) {
-            $this->logAndThrowThirdPartyApiException("Exception reaching $this->name");
+            $this->logAndThrowRuntimeApiException("Exception reaching $this->name", $url);
         }
 
         if ($response->getStatusCode() != 200) {
-            $this->logAndThrowThirdPartyApiException("$this->name returned {$response->getStatusCode()} : {$response->getBody()}");
+            $this->logAndThrowRuntimeApiException("$this->name returned {$response->getStatusCode()} : {$response->getBody()}", $url);
         }
 
         return $response;
     }
 
-    private function logAndThrowThirdPartyApiException(string $message)
+    private function logAndThrowRuntimeApiException(string $message, string $url)
     {
-        Log::error("ThirdPartyApiException: $message");
+        Log::info("Exception occurred while calling $url : $message");
         throw new RuntimeException($message);
     }
 }
