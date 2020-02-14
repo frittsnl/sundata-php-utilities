@@ -12,16 +12,13 @@ use RuntimeException;
 
 class ApiRetriever
 {
-    /** @var string */
-    private $name;
+    /** @var ApiRetrieverConfig */
+    private $config;
 
-    /**
-     * ApiRetriever constructor.
-     * @param string $name For logging purposes. Default is 'ApiRetriever'
-     */
-    public function __construct(string $name = "ApiRetriever")
+    /** @param ApiRetrieverConfig|null $config */
+    public function __construct(ApiRetrieverConfig $config = null)
     {
-        $this->name = $name;
+        $this->config = $config ? clone $config : new ApiRetrieverConfig();
     }
 
     public function restGet($url, $options = [], $fullResponse = false)
@@ -49,18 +46,19 @@ class ApiRetriever
         $options = array_merge($defaultOptions, $options);
 
         try {
-            $response = (new Client())->request(
+            $guzzleClient = new Client($this->config->toGuzzleConfig());
+            $response = $guzzleClient->request(
                 $verb,
                 $url,
                 $options
             );
 
         } catch (GuzzleException $e) {
-            $this->logAndThrowRuntimeApiException("Exception reaching $this->name", $url);
+            $this->logAndThrowRuntimeApiException("Exception reaching {$this->config->name}", $url);
         }
 
         if ($response->getStatusCode() != 200) {
-            $this->logAndThrowRuntimeApiException("$this->name returned {$response->getStatusCode()} : {$response->getBody()}", $url);
+            $this->logAndThrowRuntimeApiException("{$this->config->name} returned {$response->getStatusCode()} : {$response->getBody()}", $url);
         }
 
         return $response;
