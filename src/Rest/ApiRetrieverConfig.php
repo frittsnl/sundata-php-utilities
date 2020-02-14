@@ -6,6 +6,7 @@ namespace Sundata\Utilities\Rest;
 
 class ApiRetrieverConfig
 {
+    // DEFAULTS
     public $readTimeout = 60;
     public $connectTimeout = 60;
     public $timeout = 60;
@@ -18,6 +19,7 @@ class ApiRetrieverConfig
 
     function toGuzzleConfig()
     {
+        // See http://docs.guzzlephp.org/en/stable/request-options.html
         return [
             'timeout' => $this->timeout,
             'read_timeout' => $this->readTimeout,
@@ -25,8 +27,11 @@ class ApiRetrieverConfig
         ];
     }
 
+    function __toString()
+    {
+        return __CLASS__ . ";" . json_encode($this);
+    }
 
-    // Builder Methods
     function name(string $name)
     {
         $this->name = $name;
@@ -45,30 +50,9 @@ class ApiRetrieverConfig
         return $this;
     }
 
-    function timeout(float $timeout)
+    function timeoutInSeconds(float $timeout)
     {
         $this->timeout = $timeout;
         return $this;
-    }
-
-    // Getters
-    public function getReadTimeout(): int
-    {
-        return $this->readTimeout;
-    }
-
-    public function getConnectTimeout(): int
-    {
-        return $this->connectTimeout;
-    }
-
-    public function getTimeout(): int
-    {
-        return $this->timeout;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 }

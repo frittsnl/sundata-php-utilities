@@ -54,11 +54,11 @@ class ApiRetriever
             );
 
         } catch (GuzzleException $e) {
-            $this->logAndThrowRuntimeApiException("Exception reaching {$this->config->getName()}", $url);
+            $this->logAndThrowRuntimeApiException("Exception reaching {$this->config->name}", $url);
         }
 
         if ($response->getStatusCode() != 200) {
-            $this->logAndThrowRuntimeApiException("{$this->config->getName()} returned {$response->getStatusCode()} : {$response->getBody()}", $url);
+            $this->logAndThrowRuntimeApiException("{$this->config->name} returned {$response->getStatusCode()} : {$response->getBody()}", $url);
         }
 
         return $response;
