@@ -33,7 +33,7 @@ class ApiRetriever
         return $fullResponse ? $response : $response->getBody()->getContents();
     }
 
-    public function apiCall(string $verb, $url, $payload = [], $options = []): ResponseInterface
+    public function apiCall(string $verb, $url, $payload = [], $options = [], $validStatusCodes = [200]): ResponseInterface
     {
         Log::debug("$verb on $url w payload: " . json_encode($payload) . ' and options: ' . json_encode($options));
 
@@ -57,7 +57,7 @@ class ApiRetriever
             $this->logAndThrowRuntimeApiException("Exception reaching {$this->config->name}", $url);
         }
 
-        if ($response->getStatusCode() != 200) {
+        if (count($validStatusCodes) &&  !in_array($response->getStatusCode(), $validStatusCodes)) {
             $this->logAndThrowRuntimeApiException("{$this->config->name} returned {$response->getStatusCode()} : {$response->getBody()}", $url);
         }
 
