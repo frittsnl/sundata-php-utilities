@@ -11,6 +11,8 @@ class ApiRetrieverConfig
     public $connectTimeout = 60;
     public $timeout = 60;
     public $name = "ApiRetriever";
+    public $logPayload = false;
+    public $logOptions = false;
 
     public function __construct()
     {
@@ -53,6 +55,18 @@ class ApiRetrieverConfig
     function timeoutInSeconds(float $timeout)
     {
         $this->timeout = $timeout;
+        return $this;
+    }
+
+    function logPayload(bool $logPayload)
+    {
+        $this->logPayload = $logPayload;
+        return $this;
+    }
+
+    function logOptions(bool $logOptions)
+    {
+        $this->logOptions = $logOptions;
         return $this;
     }
 }
