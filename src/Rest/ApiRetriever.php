@@ -35,7 +35,7 @@ class ApiRetriever
 
     public function apiCall(string $verb, $url, $payload = [], $options = [], $validStatusCodes = [200]): ResponseInterface
     {
-        Log::debug("$verb on $url w payload: " . json_encode($payload) . ' and options: ' . json_encode($options));
+        Log::debug("$verb on $url" . $this->logPayloadAndOptions($payload, $options));
 
         $defaultOptions = [
             'headers' => [],
@@ -62,6 +62,14 @@ class ApiRetriever
         }
 
         return $response;
+    }
+
+    private function logPayloadAndOptions(array $payload, array $options) : string
+    {
+        $string = '';
+        $this->config->logPayload ? $string = $string . ' w payload: ' . json_encode($payload) : '';
+        $this->config->logOptions ? $string = $string . ' w options: ' . json_encode($options) : '';
+        return $string;
     }
 
     private function logAndThrowRuntimeApiException(string $message, string $url)
