@@ -29,7 +29,7 @@ class StepwiseTimeService implements TimeService
 
     function forward(DateInterval $dateInterval): CarbonImmutable
     {
-        return $this->now->add($dateInterval);
+        return $this->now = $this->now->add($dateInterval);
     }
 
     function setNow(CarbonInterface $newNow)
