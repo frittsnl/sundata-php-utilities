@@ -15,11 +15,11 @@ class StepwiseTimeService implements TimeService
 
     /**
      * StepwiseTimeService constructor.
-     * @param $now
+     * @param CarbonInterface $now
      */
-    public function __construct($now)
+    public function __construct(CarbonInterface $now)
     {
-        $this->now = $now;
+        $this->now = $now->toImmutable();
     }
 
     function now(): CarbonImmutable
