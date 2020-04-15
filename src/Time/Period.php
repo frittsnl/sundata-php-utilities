@@ -29,6 +29,31 @@ class Period
     return $this->endDate;
   }
 
+  public function inSeconds(): int
+  {
+    return $this->startDate->diffInSeconds($this->endDate);
+  }
+
+  public function inMinutes(): float
+  {
+    return round($this->inSeconds() / 60, 2);
+  }
+
+  public function inHours(): float
+  {
+    return round($this->inSeconds() / 60 / 60, 2);
+  }
+
+  public function inDays(): float
+  {
+    return round($this->inSeconds() / 60 / 60 / 24, 2);
+  }
+
+  public function inWeeks(): float
+  {
+    return round($this->inSeconds() / 60 / 60 / 24 / 7, 2);
+  }
+
   /**
    * @return string
    * @deprecated
