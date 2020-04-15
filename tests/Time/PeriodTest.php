@@ -33,18 +33,6 @@ class PeriodTest extends TestCase
     $this->assertPeriodLength($start, $end, $methodName, $expectedResult);
   }
 
-//TODO remove
-  public function daySplitDataProvider()
-  {
-    return [
-      ['2015-12-27T22:22:00+01:00', '2015-12-29T01:11:00+01:00', [
-        ['2015-12-27T22:22:00+01:00', '2015-12-28T00:00:00+01:00'],
-        ['2015-12-28T00:00:00+01:00', '2015-12-29T00:00:00+01:00'],
-        ['2015-12-29T00:00:00+01:00', '2015-12-29T01:11:00+01:00'],
-      ]],
-    ];
-  }
-
   private function assertPeriodLength($start, $end, string $methodName, $expectedResult): void
   {
     $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
