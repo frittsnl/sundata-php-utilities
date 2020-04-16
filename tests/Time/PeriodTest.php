@@ -32,17 +32,13 @@ class PeriodTest extends TestCase
   /** @dataProvider periodLengthDataProvider */
   public function testPeriodLength($start, $end, $methodName, $expectedResult)
   {
-    $this->assertPeriodLength($start, $end, $methodName, $expectedResult);
+      $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
+      $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
+
+      $period = new Period($start, $end);
+
+      $result = $period->$methodName();
+      $this->assertEquals($expectedResult, $result);
   }
 
-  private function assertPeriodLength($start, $end, string $methodName, $expectedResult): void
-  {
-    $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
-    $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
-
-    $period = new Period($start, $end);
-
-    $result = $period->$methodName();
-    $this->assertEquals($expectedResult, $result);
-  }
 }
