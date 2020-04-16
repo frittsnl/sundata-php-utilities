@@ -41,4 +41,32 @@ class PeriodTest extends TestCase
       $this->assertEquals($expectedResult, $result);
   }
 
+  public function isInPeriodDataProvider()
+  {
+    $defaultStart = '2000-01-01T00:00:00+01:00';
+    $defaultEnd =   '2000-01-02T00:00:00+01:00';
+    //@formatter:off
+    return [
+      'Between dates' =>   [$defaultStart, $defaultEnd, '2000-01-01T00:11:00+01:00', true],
+      'Before start' =>    [$defaultStart, $defaultEnd, '1999-01-01T00:11:00+01:00', false],
+      'After end' =>       [$defaultStart, $defaultEnd, '2001-01-01T00:11:00+01:00', false],
+      'Same as start' =>   [$defaultStart, $defaultEnd, $defaultStart, true],
+      'Same as end' =>     [$defaultStart, $defaultEnd, $defaultEnd, true],
+    ];
+    //@formatter:on
+  }
+
+  /** @dataProvider isInPeriodDataProvider */
+  public function testIsInPeriod($start, $end, $dateToTest, $expectedResult)
+  {
+      $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
+      $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
+      $dateToTest = CarbonImmutable::parse($dateToTest, 'Europe/Amsterdam');
+
+      $period = new Period($start, $end);
+
+      $result = $period->isInPeriod($dateToTest);
+      $this->assertEquals($expectedResult, $result);
+    }
+
 }

@@ -54,6 +54,15 @@ class Period
     return $this->inSeconds() / 60 / 60 / 24 / 7;
   }
 
+    /**
+     * @param CarbonInterface $date
+     * @return boolean
+     * Tells if given date is within period
+     */
+    public function isInPeriod(CarbonInterface $date): bool
+  {
+      return $date->isBetween($this->startDate, $this->endDate);
+  }
   /**
    * @return string
    * @deprecated
