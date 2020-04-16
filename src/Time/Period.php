@@ -36,22 +36,22 @@ class Period
 
   public function inMinutes(): float
   {
-    return round($this->inSeconds() / 60, 2);
+    return $this->inSeconds() / 60;
   }
 
   public function inHours(): float
   {
-    return round($this->inSeconds() / 60 / 60, 2);
+    return $this->inSeconds() / 60 / 60;
   }
 
   public function inDays(): float
   {
-    return round($this->inSeconds() / 60 / 60 / 24, 2);
+    return $this->inSeconds() / 60 / 60 / 24;
   }
 
   public function inWeeks(): float
   {
-    return round($this->inSeconds() / 60 / 60 / 24 / 7, 2);
+    return $this->inSeconds() / 60 / 60 / 24 / 7;
   }
 
   /**
