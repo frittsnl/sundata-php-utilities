@@ -39,10 +39,13 @@ class ApiRetriever
 
         $defaultOptions = [
             'headers' => [],
-            'exceptions' => false,
-            'json' => $payload
+            'exceptions' => false
         ];
 
+        // Only add json payload if it's there
+        if($payload)[
+            $defaultOptions['json'] => $payload
+        ];
         $options = array_merge($defaultOptions, $options);
 
         try {
