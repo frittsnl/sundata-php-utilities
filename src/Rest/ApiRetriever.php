@@ -6,6 +6,7 @@ namespace Sundata\Utilities\Rest;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
@@ -42,10 +43,9 @@ class ApiRetriever
             'exceptions' => false
         ];
 
-        // Only add json payload if it's there
-        if($payload)[
-            $defaultOptions['json'] => $payload
-        ];
+        if ($payload) {
+            $defaultOptions[RequestOptions::JSON] = $payload;
+        }
         $options = array_merge($defaultOptions, $options);
 
         try {
@@ -60,14 +60,14 @@ class ApiRetriever
             $this->logAndThrowRuntimeApiException("Exception reaching {$this->config->name}", $url);
         }
 
-        if (count($validStatusCodes) &&  !in_array($response->getStatusCode(), $validStatusCodes)) {
+        if (count($validStatusCodes) && !in_array($response->getStatusCode(), $validStatusCodes)) {
             $this->logAndThrowRuntimeApiException("{$this->config->name} returned {$response->getStatusCode()} : {$response->getBody()}", $url);
         }
 
         return $response;
     }
 
-    private function logPayloadAndOptions(array $payload, array $options) : string
+    private function logPayloadAndOptions(array $payload, array $options): string
     {
         $string = '';
         $this->config->logPayload ? $string = $string . ' w payload: ' . json_encode($payload) : '';
