@@ -5,6 +5,7 @@ namespace Sundata\Utilities\Test\Time;
 
 
 use Carbon\CarbonImmutable;
+use Generator;
 use Sundata\Utilities\Time\DateSplitter;
 use Sundata\Utilities\Time\Period;
 use PHPUnit\Framework\TestCase;
@@ -53,15 +54,17 @@ class DateSplitterTest extends TestCase
     }
 
 
-    public function daySplitDataProvider()
+    public function daySplitDataProvider(): Generator
     {
-        return [
-            ['2015-12-27T22:22:00+01:00', '2015-12-29T01:11:00+01:00', [
-                ['2015-12-27T22:22:00+01:00', '2015-12-28T00:00:00+01:00'],
-                ['2015-12-28T00:00:00+01:00', '2015-12-29T00:00:00+01:00'],
-                ['2015-12-29T00:00:00+01:00', '2015-12-29T01:11:00+01:00'],
-            ]],
-        ];
+        yield 'simple' => ['2015-12-27T22:22:00+01:00', '2015-12-29T01:11:00+01:00', [
+            ['2015-12-27T22:22:00+01:00', '2015-12-28T00:00:00+01:00'],
+            ['2015-12-28T00:00:00+01:00', '2015-12-29T00:00:00+01:00'],
+            ['2015-12-29T00:00:00+01:00', '2015-12-29T01:11:00+01:00'],
+        ]];
+        yield 'utc' => ['2021-03-01T23:00:00Z', '2021-03-02T23:00:00Z', [
+            ['2021-03-01T23:00:00+00:00', '2021-03-02T00:00:00+00:00'],
+            ['2021-03-02T00:00:00+00:00', '2021-03-02T23:00:00+00:00']
+        ]];
     }
 
     /** @dataProvider daySplitDataProvider */
@@ -165,5 +168,25 @@ class DateSplitterTest extends TestCase
 
         $period = DateSplitter::$methodNamePeriod(new Period($start, $end));
         $this->assertEquals($expectedPeriods, $period);
+    }
+
+    public function split24hDataProvider(): Generator
+    {
+        yield 'simple' => ['2015-12-27T22:22:00+01:00', '2015-12-29T01:11:00+01:00', [
+            ['2015-12-27T22:22:00+01:00', '2015-12-28T22:22:00+01:00'],
+            ['2015-12-28T22:22:00+01:00', '2015-12-29T01:11:00+01:00']
+        ]];
+        yield 'utc' => ['2021-03-01T23:00:00Z', '2021-03-02T23:00:00Z', [
+            ['2021-03-01T23:00:00Z', '2021-03-02T23:00:00Z']
+        ]];
+    }
+
+    /**
+     * @dataProvider split24hDataProvider
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function test24hSplit(string $start, string $end, array $expectedPeriods)
+    {
+        $this->assertSplit($start, $end, $expectedPeriods, 'splitIn24hs', 'splitPeriodIn24hs');
     }
 }
