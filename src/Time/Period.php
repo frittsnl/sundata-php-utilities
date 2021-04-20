@@ -6,53 +6,53 @@ use Carbon\CarbonInterface;
 
 class Period
 {
-  public $startDate;
-  public $endDate;
+    public $startDate;
+    public $endDate;
 
-  /**
-   * @param CarbonInterface $startDate
-   * @param CarbonInterface $endDate
-   */
-  public function __construct(CarbonInterface $startDate, CarbonInterface $endDate)
-  {
-    $this->startDate = $startDate;
-    $this->endDate = $endDate;
-  }
+    /**
+     * @param CarbonInterface $startDate
+     * @param CarbonInterface $endDate
+     */
+    public function __construct(CarbonInterface $startDate, CarbonInterface $endDate)
+    {
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
 
-  public function getStart()
-  {
-    return $this->startDate;
-  }
+    public function getStart(): CarbonInterface
+    {
+        return $this->startDate;
+    }
 
-  public function getEnd()
-  {
-    return $this->endDate;
-  }
+    public function getEnd(): CarbonInterface
+    {
+        return $this->endDate;
+    }
 
-  public function inSeconds(): int
-  {
-    return $this->startDate->diffInSeconds($this->endDate);
-  }
+    public function inSeconds(): int
+    {
+        return $this->startDate->diffInSeconds($this->endDate);
+    }
 
-  public function inMinutes(): float
-  {
-    return $this->inSeconds() / 60;
-  }
+    public function inMinutes(): float
+    {
+        return $this->inSeconds() / 60;
+    }
 
-  public function inHours(): float
-  {
-    return $this->inSeconds() / 60 / 60;
-  }
+    public function inHours(): float
+    {
+        return $this->inSeconds() / 60 / 60;
+    }
 
-  public function inDays(): float
-  {
-    return $this->inSeconds() / 60 / 60 / 24;
-  }
+    public function inDays(): float
+    {
+        return $this->inSeconds() / 60 / 60 / 24;
+    }
 
-  public function inWeeks(): float
-  {
-    return $this->inSeconds() / 60 / 60 / 24 / 7;
-  }
+    public function inWeeks(): float
+    {
+        return $this->inSeconds() / 60 / 60 / 24 / 7;
+    }
 
     /**
      * @param CarbonInterface $date
@@ -60,20 +60,46 @@ class Period
      * Tells if given date is within period
      */
     public function isInPeriod(CarbonInterface $date): bool
-  {
-      return $date->isBetween($this->startDate, $this->endDate);
-  }
-  /**
-   * @return string
-   * @deprecated
-   */
-  public function toString()
-  {
-    return "Period[{$this->getStart()->toRfc3339String()};{$this->getEnd()->toRfc3339String()}]";
-  }
+    {
+        return $date->isBetween($this->startDate, $this->endDate);
+    }
 
-  function __toString()
-  {
-    return "Period[{$this->getStart()->toRfc3339String()};{$this->getEnd()->toRfc3339String()}]";
-  }
+    /**
+     * Use __toString instead
+     * @return string
+     * @deprecated
+     */
+    public function toString(): string
+    {
+        return $this->__toString();
+    }
+
+    function __toString()
+    {
+        return "Period[{$this->getStart()->toRfc3339String()};{$this->getEnd()->toRfc3339String()}]";
+    }
+
+    function splitOnDstTransitions(): array
+    {
+        $events = [$this->getStart()];
+
+        for ($y = $this->getStart()->year; $y <= $this->getEnd()->year; ++$y) {
+            $dstStart = DstTransitions::getDstStart($y);
+            if ($this->isInPeriod($dstStart)) {
+                $events[] = $dstStart;
+            }
+            $dstEnd = DstTransitions::getDstEnd($y);
+            if ($this->isInPeriod($dstEnd)) {
+                $events[] = $dstEnd;
+            }
+        }
+
+        $events[] = $this->getEnd();
+
+        $result = [];
+        for ($i = 0; $i + 1 < count($events); ++$i) {
+            $result[] = new Period($events[$i], $events[$i + 1]);
+        }
+        return $result;
+    }
 }

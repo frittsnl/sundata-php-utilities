@@ -10,9 +10,9 @@ use PHPUnit\Framework\TestCase;
 class PeriodTest extends TestCase
 {
 
-  public function periodLengthDataProvider()
-  {
-    //@formatter:off
+    public function periodLengthDataProvider(): array
+    {
+        //@formatter:off
     return [
         '12 minutes diff in seconds' =>                     ['2000-01-01T00:00:00+01:00', '2000-01-01T00:12:00+01:00', 'inSeconds', 12*60],
         '3 days, 25 min diff in seconds' =>                 ['2000-01-01T00:00:00+01:00', '2000-01-04T00:25:00+01:00', 'inSeconds', (60*60*24*3) + (25*60)],
@@ -27,25 +27,25 @@ class PeriodTest extends TestCase
         '31 days in weeks' =>                               ['2000-01-01T00:00:00+01:00', '2000-02-01T00:00:00+01:00', 'inWeeks',   31/7]
     ];
     //@formatter:on
-  }
+    }
 
-  /** @dataProvider periodLengthDataProvider */
-  public function testPeriodLength($start, $end, $methodName, $expectedResult)
-  {
-      $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
-      $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
+    /** @dataProvider periodLengthDataProvider */
+    public function testPeriodLength($start, $end, $methodName, $expectedResult)
+    {
+        $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
+        $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
 
-      $period = new Period($start, $end);
+        $period = new Period($start, $end);
 
-      $result = $period->$methodName();
-      $this->assertEquals($expectedResult, $result);
-  }
+        $result = $period->$methodName();
+        $this->assertEquals($expectedResult, $result);
+    }
 
-  public function isInPeriodDataProvider()
-  {
-    $defaultStart = '2000-01-01T00:00:00+01:00';
-    $defaultEnd =   '2000-01-02T00:00:00+01:00';
-    //@formatter:off
+    public function isInPeriodDataProvider(): array
+    {
+        $defaultStart = '2000-01-01T00:00:00+01:00';
+        $defaultEnd = '2000-01-02T00:00:00+01:00';
+        //@formatter:off
     return [
       'Between dates' =>   [$defaultStart, $defaultEnd, '2000-01-01T00:11:00+01:00', true],
       'Before start' =>    [$defaultStart, $defaultEnd, '1999-01-01T00:11:00+01:00', false],
@@ -54,19 +54,73 @@ class PeriodTest extends TestCase
       'Same as end' =>     [$defaultStart, $defaultEnd, $defaultEnd, true],
     ];
     //@formatter:on
-  }
-
-  /** @dataProvider isInPeriodDataProvider */
-  public function testIsInPeriod($start, $end, $dateToTest, $expectedResult)
-  {
-      $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
-      $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
-      $dateToTest = CarbonImmutable::parse($dateToTest, 'Europe/Amsterdam');
-
-      $period = new Period($start, $end);
-
-      $result = $period->isInPeriod($dateToTest);
-      $this->assertEquals($expectedResult, $result);
     }
 
+    /** @dataProvider isInPeriodDataProvider */
+    public function testIsInPeriod($start, $end, $dateToTest, $expectedResult)
+    {
+        $start = CarbonImmutable::parse($start, 'Europe/Amsterdam');
+        $end = CarbonImmutable::parse($end, 'Europe/Amsterdam');
+        $dateToTest = CarbonImmutable::parse($dateToTest, 'Europe/Amsterdam');
+
+        $period = new Period($start, $end);
+
+        $result = $period->isInPeriod($dateToTest);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    function dstSplittingProvider(): array
+    {
+        return [
+            'normal' => ['2018-01-01', '2019-01-01', [
+                "2018-01-01T00:00:00Z",
+                "2018-03-25T01:00:00Z",
+                "2018-10-28T01:00:00Z",
+            ]],
+            'zero-size period' => ['2018-01-01', '2018-01-01', [
+                "2018-01-01T00:00:00Z",
+            ]],
+            'period wo dst' => ['2018-01-02', '2018-01-03', [
+                "2018-01-02T00:00:00Z",
+            ]],
+            'only dst-start' => ['2018-01-02', '2018-06-03', [
+                "2018-01-02T00:00:00Z",
+                "2018-03-25T01:00:00Z"
+            ]],
+            'only dst-end' => ['2018-06-03', '2019-02-02', [
+                "2018-06-03T00:00:00Z",
+                "2018-10-28T01:00:00Z"
+            ]]
+        ];
+    }
+
+    /** @dataProvider dstSplittingProvider */
+    function testDstSplitting($start, $end, array $periodsStarts)
+    {
+        $periods = (new Period(
+            CarbonImmutable::parse($start),
+            CarbonImmutable::parse($end)
+        ))->splitOnDstTransitions();
+
+        $periodStartStrings = array_map(function (Period $period) {
+            return $period->getStart()->toIso8601ZuluString();
+        }, $periods);
+
+        $this->assertSameSize($periodsStarts, $periods);
+        $this->assertEmpty(array_diff($periodsStarts, $periodStartStrings));
+    }
+
+    function testDuration()
+    {
+        $period = new Period(
+            CarbonImmutable::parse('1988-08-20'),
+            CarbonImmutable::parse('2019-07-15')
+        );
+        $this->assertEquals(1612.2857142857, $period->inWeeks());
+        $this->assertEquals(11286, $period->inDays());
+        $this->assertEquals(270864, $period->inHours());
+        $this->assertEquals(16251840, $period->inMinutes());
+        $this->assertEquals(975110400, $period->inSeconds());
+
+    }
 }
