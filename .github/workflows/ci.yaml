@@ -36,4 +36,4 @@ jobs:
     needs: test
     steps:
       - name: Release new package on private Satis/Composer
-        run: wget https://packages.sddns.nl/admin/satis/build
+        run: wget https://packages.sddns.nl/admin/satis/buildRun
