@@ -40,11 +40,7 @@ class RadiationInPeriod
     private static function isMaxOf366days(Period $period): bool
     {
         $totalDays = $period->getStart()->diffInDays($period->getEnd()) + 1;
-        if ($totalDays > self::maxDaysForCalculation()) {
-            $maxDays = self::maxDaysForCalculation();
-            return false;
-        }
-        return true;
+        return $totalDays < self::maxDaysForCalculation();
     }
 
     /**
