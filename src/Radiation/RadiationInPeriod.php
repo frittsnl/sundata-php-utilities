@@ -3,10 +3,9 @@
 
 namespace Sundata\Utilities\Radiation;
 
-
 use InvalidArgumentException;
+use Sundata\Utilities\Time\DateSplitter;
 use Sundata\Utilities\Time\Period;
-use function Couchbase\defaultDecoder;
 
 class RadiationInPeriod
 {
@@ -14,6 +13,46 @@ class RadiationInPeriod
 
     // TODO move this to Sundata helpers?
     public static function getAvgRadiation(Period $period): float
+    {
+        if (self::isMaxOf366days($period)) {
+            return self::getAvgRadiationWithin1Year($period);
+        }
+
+        $periods = DateSplitter::splitInYears($period->getStart(), $period->getEnd());
+        $radiation = 0;
+        foreach ($periods as $period) {
+            $radiation = $radiation + self::getAvgRadiationWithin1Year($period);
+        }
+        return $radiation;
+    }
+
+    public static function getRadiationPercentageOf7YAverage(Period $period): float
+    {
+        $radiation = self::getAvgRadiation($period);
+        $percentage = ($radiation * 100) / self::getYearTotal();
+        return round($percentage, 1);
+    }
+
+    private static function getYearTotal()
+    {
+        return self::AVG_CUM_RADIATION_PER_DAY[count(self::AVG_CUM_RADIATION_PER_DAY)];
+    }
+
+    private static function isMaxOf366days(Period $period): bool
+    {
+        $totalDays = $period->getStart()->diffInDays($period->getEnd()) + 1;
+        if ($totalDays > self::maxDaysForCalculation()) {
+            $maxDays = self::maxDaysForCalculation();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param Period $period
+     * @return float|int|mixed
+     */
+    private static function getAvgRadiationWithin1Year(Period $period)
     {
         $start = $period->getStart();
         $end = $period->getEnd();
@@ -41,16 +80,9 @@ class RadiationInPeriod
         }
     }
 
-    public static function getRadiationPercentageOf7YAverage(Period $period): float
+    private static function maxDaysForCalculation(): int
     {
-        $radiation = self::getAvgRadiation($period);
-        $percentage = ($radiation * 100) / self::getYearTotal();
-        return round($percentage, 1);
-    }
-
-    private static function getYearTotal()
-    {
-        return self::AVG_CUM_RADIATION_PER_DAY[count(self::AVG_CUM_RADIATION_PER_DAY )];
+        return count(self::AVG_CUM_RADIATION_PER_DAY);
     }
 
     // seven year (2014-2020) average,
