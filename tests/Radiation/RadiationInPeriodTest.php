@@ -48,7 +48,7 @@ class RadiationInPeriodTest extends TestCase
             21.7
         ];
 
-        yield 'October 2018 to March 2020 (more then 1 year)' => [
+        yield 'October 2018 to March 2020 (more than 1 year)' => [
             new Period(
                 CarbonImmutable::parse('2018-10-01'),
                 CarbonImmutable::parse('2020-03-31')
