@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build-test:
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -31,5 +31,9 @@ jobs:
         uses: php-actions/phpunit@v3
         with:
           configuration: phpunit.xml
+  test_success:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
       - name: Release new package on private Satis/Composer
         run: wget https://packages.sddns.nl/admin/satis/build
