@@ -1,0 +1,20 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v5 # or alternative dependency management
+      - uses: php-actions/phpunit@v3
+
+      - name: PHPUnit tests
+        uses: php-actions/phpunit@v3
+        with:
+          configuration: phpunit.xml
+          memory_limit: 256M
+      - name: Release new package on private Satis/Composer
+        run: wget https://packages.sddns.nl/admin/satis/build
