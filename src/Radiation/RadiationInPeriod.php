@@ -11,7 +11,6 @@ class RadiationInPeriod
 {
     const LAST_DAY = 366;
 
-    // TODO move this to Sundata helpers?
     public static function getAvgRadiation(Period $period): float
     {
         if (self::isMaxOf366days($period)) {
