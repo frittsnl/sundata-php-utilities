@@ -1,0 +1,29 @@
+[
+  {
+    "location_name": "Driebergen",
+    "date_time": "2018-10-16 09:30:00",
+    "timezone": "Europe/Amsterdam",
+    "latitude": 52.04748,
+    "longitude": 5.27557,
+    "expected_angle": 11,
+    "expected_orientation": 120
+  },
+  {
+    "location_name": "New York",
+    "date_time": "2018-04-18 14:35:00",
+    "timezone": "America/New_York",
+    "latitude": 43.15617,
+    "longitude": -75.84499,
+    "expected_angle": 52,
+    "expected_orientation": 218
+  },
+  {
+    "location_name": "Sydney",
+    "date_time": "2009-12-16 11:35:00",
+    "timezone": "Australia/Sydney",
+    "latitude": -33.85482,
+    "longitude": 151.21645,
+    "expected_angle": 70,
+    "expected_orientation": 63
+  }
+]
