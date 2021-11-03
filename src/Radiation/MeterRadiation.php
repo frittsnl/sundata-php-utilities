@@ -21,6 +21,14 @@ class MeterRadiation
         return $sunObject->getSunPosition();
     }
 
+    /**
+     * Using the formula from
+     * https://www.pveducation.org/pvcdrom/properties-of-sunlight/arbitrary-orientation-and-tilt
+     *
+     * @param SunOrientationAndAngle $sunPos
+     * @param MeterRadiationRequest $request
+     * @return float|int
+     */
     public function calculateSolarIrradiance(SunOrientationAndAngle $sunPos, MeterRadiationRequest $request) {
         $sunAngleRad = deg2rad($sunPos->angle);
         $sunAzimuthRad = deg2rad($sunPos->orientation);
