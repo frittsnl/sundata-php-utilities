@@ -9,25 +9,26 @@ class MeterRadiation
 {
     const TIMEZONE = 'CET';
 
-    public function calculateIrradianceForDateTime(RadiationRequest $request) {
+    public function calculateIrradianceForDateTime(MeterRadiationRequest $request) {
         $sunPos = $this->getSolarPositionForDateTime($request);
-        return $this->calculateSolarIrradiance($sunPos, $request);
+        $irradiance =  $this->calculateSolarIrradiance($sunPos, $request);
+        return $irradiance < 0 ? 0 : $irradiance;
     }
 
-    public function getSolarPositionForDateTime(RadiationRequest $request): SunOrientationAndAngle {
+    public function getSolarPositionForDateTime(MeterRadiationRequest $request): SunOrientationAndAngle {
         $sunObject = new SunOrientationCalculation(
             $request->hour, self::TIMEZONE, $request->lat, $request->long);
         return $sunObject->getSunPosition();
     }
 
-    public function calculateSolarIrradiance(SunOrientationAndAngle $sunPos, RadiationRequest $request) {
+    public function calculateSolarIrradiance(SunOrientationAndAngle $sunPos, MeterRadiationRequest $request) {
         $sunAngleRad = deg2rad($sunPos->angle);
         $sunAzimuthRad = deg2rad($sunPos->orientation);
         $meterAngleRad = deg2rad($request->meterAngle);
         $meterAzimuthRad = deg2rad($request->meterOrientation);
 
         return $request->globalIrradiance *
-            (cos($sunAngleRad) * sin($meterAngleRad) * cos( - $sunAzimuthRad)
-                + sin($sunAngleRad) * cos($meterAzimuthRad));
+            (cos($sunAngleRad) * sin($meterAngleRad) * cos($meterAzimuthRad - $sunAzimuthRad)
+                + sin($sunAngleRad) * cos($meterAngleRad));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Sundata\Utilities\Radiation;
 
-class RadiationRequest
+class MeterRadiationRequest
 {
     public string  $lat;
     public string  $long;
