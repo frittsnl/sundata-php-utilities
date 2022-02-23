@@ -31,4 +31,17 @@ class VersionTest extends TestCase
             Version::of(' 8.5.3 ')->toString()
         );
     }
+
+    function testAtLeastAndBelow()
+    {
+        $this->assertTrue(
+            Version::of('2.3.4 ')->isAtLeastAndBelow('2.2.1', '3.0.0')
+        );
+        $this->assertFalse(
+            Version::of('1.3.4 ')->isAtLeastAndBelow('2.2.1', '3.0.0')
+        );
+        $this->assertFalse(
+            Version::of('3.0.0')->isAtLeastAndBelow('2.2.1', '3.0.0')
+        );
+    }
 }

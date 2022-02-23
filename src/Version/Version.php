@@ -54,6 +54,13 @@ class Version
         return $this->isMajor($major) && $this->isMinor($minor);
     }
 
+    function isAtLeastAndBelow(string $atLeast, string $below): bool
+    {
+        $versionString = $this->toString();
+        return version_compare($atLeast, $versionString, '<=')
+            && version_compare($versionString, $below, '<');
+    }
+
     function toString(): string
     {
         return join('.', [
