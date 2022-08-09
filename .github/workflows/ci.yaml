@@ -31,6 +31,7 @@ jobs:
         uses: php-actions/phpunit@v3
         with:
           configuration: phpunit.xml
+          php_version: ${{ matrix.php-versions }}
   test_success:
     runs-on: ubuntu-latest
     needs: test
