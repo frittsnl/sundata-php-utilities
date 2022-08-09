@@ -39,8 +39,7 @@ class MeterRadiationTest extends TestCase
                 52.1009166,
                 5.36237110,
                 40,
-                270,
-
+                270
             ),
             new CarbonImmutable('2021-11-01 11:00:00'),
             111,
