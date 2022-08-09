@@ -4,10 +4,10 @@ namespace Sundata\Utilities\Radiation;
 
 class MeterFacts
 {
-    public float $lat;
-    public float $long;
-    public int   $meterAngleInDegrees;
-    public int   $meterOrientationInDegrees;
+    public $lat;
+    public $long;
+    public $meterAngleInDegrees;
+    public $meterOrientationInDegrees;
 
     /**
      * @param float $lat latitude in GPS decimals (DD.dddddd)
@@ -19,8 +19,8 @@ class MeterFacts
         float $lat,
         float $long,
         int   $meterAngleInDegrees,
-        int   $meterOrientationInDegrees)
-    {
+        int   $meterOrientationInDegrees
+    ) {
         $this->lat = $lat;
         $this->long = $long;
         $this->meterAngleInDegrees = $meterAngleInDegrees;
