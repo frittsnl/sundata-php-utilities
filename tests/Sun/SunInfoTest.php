@@ -18,6 +18,11 @@ class SunInfoTest extends TestCase
             $lat, $lon, $date
         );
 
+        $this->assertEquals(
+            '2022-08-07T21:20:57+02:00',
+            $sunInfo->sunset()->toRfc3339String()
+        );
+
         $this->assertTrue(in_array(
             $sunInfo->sunset()->toRfc3339String(),
             ['2022-08-07T21:20:57+02:00', '']
