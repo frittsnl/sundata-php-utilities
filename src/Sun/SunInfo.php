@@ -29,7 +29,7 @@ class SunInfo
         $carbon = $date->asCarbonImmutable();
         return new SunInfo(
             date_sun_info(
-                $carbon->unix(),
+                strtotime($date->toDateString()),
                 $lat,
                 $lon
             ),
