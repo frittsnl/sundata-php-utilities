@@ -21,7 +21,7 @@ class MeterRadiationTest extends TestCase
             ),
             new CarbonImmutable('2021-11-01 11:00:00'),
             111,
-            107.6038497322];
+            107.6038497321954];
 
         yield 'East facing 80 degrees should return 18 W/m2' => [
             new MeterFacts(
@@ -32,7 +32,7 @@ class MeterRadiationTest extends TestCase
             ),
             new CarbonImmutable('2021-11-01 11:00:00'),
             111,
-            18.049368565163];
+            18.049368565163366];
 
         yield 'West facing 40 degrees should return 26 W/m2' => [
             new MeterFacts(
@@ -43,7 +43,7 @@ class MeterRadiationTest extends TestCase
             ),
             new CarbonImmutable('2021-11-01 11:00:00'),
             111,
-            26.35906520119];
+            26.35906520119014];
     }
 
     /** @dataProvider MeterRadiationDataProvider */
