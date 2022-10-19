@@ -30,31 +30,24 @@ class Energy implements Measurement
         return $this->wattHour / 1E6;
     }
 
-    public function format()
+    public function format(): FormattedMeasurement
     {
-        /*
-         * $energy = Energy::fromKwh( $actual_yield_in_kwh);
-         * ...
-         * <b>$energy->format()->value</b>
-         * $energy->format()->unit
-         */
+        // TODO all that magic
+        if ($this->wattHour >= 1E6) {
+            return new FormattedMeasurement($this->asMwh(), 'MWh');
+        }
 
-        $unit = ...;
-        $factor = ...;
-        return [
-            $this->wattHour * $factor,
-            $unit
-        ];
-
+        return new FormattedMeasurement($this->asKwh(), 'kWh');
     }
 
-    public function __toString($precision = 3): string
+    public function __toString(): string
     {
-        if ($this->wattHour < 1000) {
-
-        } elseif (true) {
-
-        };
+        return 'TODO';
+//        if ($this->wattHour < 1000) {
+//
+//        } elseif (true) {
+//
+//        };
         //logic
     }
 
