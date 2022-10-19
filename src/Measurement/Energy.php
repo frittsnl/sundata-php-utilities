@@ -4,22 +4,25 @@ namespace Sundata\Utilities\Measurement;
 
 class Energy implements Measurement
 {
-    // Immutable
-    private $wattHour;
+    private float $wattHour;
+    public int $precision = 2;
 
     private function __construct(
-        float $wattHour
+        $wattHour
     ) {
         $this->wattHour = $wattHour;
     }
 
-    // factory-methods
     public static function fromKwh(float $kwh): Energy
     {
         return new Energy($kwh * 1000);
     }
 
-    // out
+    public function asWh(): float
+    {
+        return $this->wattHour;
+    }
+
     public function asKwh(): float
     {
         return $this->wattHour / 1E3;
@@ -30,29 +33,60 @@ class Energy implements Measurement
         return $this->wattHour / 1E6;
     }
 
+    public function asTwh(): float
+    {
+        return $this->wattHour / 1E6;
+    }
+
     public function format(): FormattedMeasurement
     {
-        // TODO all that magic
-        if ($this->wattHour >= 1E6) {
-            return new FormattedMeasurement($this->asMwh(), 'MWh');
+        if ($this->wattHour >= 1E13) {
+            return new FormattedMeasurement(
+                round($this->asTwh(), $this->getPrecision()),
+                'TWh'
+            );
         }
-
-        return new FormattedMeasurement($this->asKwh(), 'kWh');
+        if ($this->wattHour >= 1E10) {
+            return new FormattedMeasurement(
+                round($this->asMwh(), $this->getPrecision()),
+                'GWh'
+            );
+        }
+        if ($this->wattHour >= 1E7) {
+            return new FormattedMeasurement(
+                round($this->asMwh(), $this->getPrecision()),
+                'MWh'
+            );
+        }
+        if ($this->wattHour >= 1E4) {
+            return new FormattedMeasurement(
+                round($this->asKwh(), $this->getPrecision()),
+                'kWh'
+            );
+        }
+        return new FormattedMeasurement(
+            round($this->asWh(), $this->getPrecision()),
+            'Wh'
+        );
     }
 
     public function __toString(): string
     {
-        return 'TODO';
-//        if ($this->wattHour < 1000) {
-//
-//        } elseif (true) {
-//
-//        };
-        //logic
+        return $this->format()->__toString();
     }
 
     public function asFloat(): float
     {
         return $this->wattHour;
+    }
+
+    public function setPrecision(int $precision): void
+    {
+        $this->precision = $precision;
+    }
+
+    public function getPrecision(): int
+    {
+        return $this->precision;
     }
 }
