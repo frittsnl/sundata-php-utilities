@@ -116,7 +116,7 @@ class PeriodTest extends TestCase
             CarbonImmutable::parse('1988-08-20'),
             CarbonImmutable::parse('2019-07-15')
         );
-        $this->assertEquals(1612.2857142857, $period->inWeeks());
+        $this->assertEquals(1612.2857142857142, $period->inWeeks());
         $this->assertEquals(11286, $period->inDays());
         $this->assertEquals(270864, $period->inHours());
         $this->assertEquals(16251840, $period->inMinutes());
