@@ -17,17 +17,17 @@ class EnergyTest extends TestCase
     public function formatDataProvider(): array
     {
         return [
-            [1, 'Wh'],
-            [1000, 'kWh'],
-            [10000, 'MWh'],
-            [100000, 'MWh'],
-            [1000000, 'MWh'],
-            [10000000, 'GWh'],
-            [100000000, 'GWh'],
-            [1000000000, 'GWh'],
-            [10000000000, 'TWh'],
-            [10000000000000000000000, 'TWh'],
-            [999999999999999999999999999999999999, 'TWh'],
+            [$kwh = 1, 'Wh'],
+            [$kwh = 1000, 'kWh'],
+            [$kwh = 10000, 'MWh'],
+            [$kwh = 100000, 'MWh'],
+            [$kwh = 1000000, 'MWh'],
+            [$kwh = 10000000, 'GWh'],
+            [$kwh = 100000000, 'GWh'],
+            [$kwh = 1000000000, 'GWh'],
+            [$kwh = 10000000000, 'TWh'],
+            [$kwh = 10000000000000000000000, 'TWh'],
+            [$kwh = 999999999999999999999999999999999999, 'TWh'],
         ];
     }
 
@@ -37,6 +37,17 @@ class EnergyTest extends TestCase
         $energy = Energy::fromKwh($inputKwh);
         $formattedMeasurement = $energy->format();
         $this->assertEquals($expectedUnit, $formattedMeasurement->unit);
+    }
+
+    public function testItDoesTheRightCalculation()
+    {
+        $kwh = 1000000000000;
+        $energy = Energy::fromKwh(1000000000000);
+        $this->assertEquals($kwh * 1000, $energy->asWh());
+        $this->assertEquals($kwh, $energy->asKwh());
+        $this->assertEquals($kwh / 1000, $energy->asMwh());
+        $this->assertEquals($kwh / 1000 / 1000, $energy->asGwh());
+        $this->assertEquals($kwh / 1000 / 1000 / 1000, $energy->asTwh());
     }
 
     public function formatsToTheRightValueAndUnitDataProvider(): array
@@ -62,9 +73,12 @@ class EnergyTest extends TestCase
     public function testSettingPrecisionWorks()
     {
         $energy = Energy::fromKwh(21234567895);
-        $this->assertEquals(21234567.9, $energy->format()->value);
-        $energy->setPrecision(3);
-        $this->assertEquals(21234567.895, $energy->format()->value);
-        $this->assertEquals('21234567.895 TWh', $energy->format()->__toString());
+        $this->assertEquals(21.23, $energy->format()->value);
+        $this->assertEquals('TWh', $energy->format()->unit);
+
+        $this->assertEquals(21.2, $energy->format(1)->value);
+        $this->assertEquals('21.2 TWh', $energy->format(1)->__toString());
+        $this->assertEquals(21.2346, $energy->format(4)->value);
+        $this->assertEquals('21.2346 TWh', $energy->format(4)->__toString());
     }
 }
