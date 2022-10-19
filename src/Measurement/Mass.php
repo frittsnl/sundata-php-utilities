@@ -2,7 +2,7 @@
 
 namespace Sundata\Utilities\Measurement;
 
-class Weight implements Measurement
+class Mass implements Measurement
 {
     private float $gram;
 
@@ -12,9 +12,9 @@ class Weight implements Measurement
         $this->gram = $gram;
     }
 
-    public static function fromKg(float $kg): Weight
+    public static function fromKg(float $kg): Mass
     {
-        return new Weight($kg * 1000);
+        return new Mass($kg * 1000);
     }
 
     public function asGr(): float

@@ -3,15 +3,15 @@
 namespace Sundata\Utilities\Test\Measurement;
 
 use PHPUnit\Framework\TestCase;
-use Sundata\Utilities\Measurement\Weight;
+use Sundata\Utilities\Measurement\Mass;
 use Sundata\Utilities\Measurement\FormattedMeasurement;
 
-class WeightTest extends TestCase
+class MassTest extends TestCase
 {
     function testFormatReturnsTheRightClass()
     {
-        $weight = Weight::fromKg(1000);
-        $this->assertInstanceOf(FormattedMeasurement::class, $weight->format());
+        $mass = Mass::fromKg(1000);
+        $this->assertInstanceOf(FormattedMeasurement::class, $mass->format());
     }
 
     public function formatDataProvider(): array
@@ -34,20 +34,20 @@ class WeightTest extends TestCase
     /** @dataProvider formatDataProvider */
     public function testItFormatsToTheRightUnit($inputKg, $expectedUnit)
     {
-        $weight = Weight::fromKg($inputKg);
-        $formattedMeasurement = $weight->format();
+        $mass = Mass::fromKg($inputKg);
+        $formattedMeasurement = $mass->format();
         $this->assertEquals($expectedUnit, $formattedMeasurement->unit);
     }
 
     public function testItDoesTheRightCalculation()
     {
         $kg = 100000000000;
-        $weight = Weight::fromKg($kg);
-        $this->assertEquals($kg * 1000, $weight->asGr());
-        $this->assertEquals($kg, $weight->asKg());
-        $this->assertEquals($kg / 1000, $weight->asT());
-        $this->assertEquals($kg / 1000 / 1000 / 1000, $weight->asMt());
-        $this->assertEquals($kg / 1000 / 1000 / 1000 / 1000, $weight->asGt());
+        $mass = Mass::fromKg($kg);
+        $this->assertEquals($kg * 1000, $mass->asGr());
+        $this->assertEquals($kg, $mass->asKg());
+        $this->assertEquals($kg / 1000, $mass->asT());
+        $this->assertEquals($kg / 1000 / 1000 / 1000, $mass->asMt());
+        $this->assertEquals($kg / 1000 / 1000 / 1000 / 1000, $mass->asGt());
     }
 
     public function formatsToTheRightValueAndUnitDataProvider(): array
@@ -66,19 +66,19 @@ class WeightTest extends TestCase
     /** @dataProvider formatsToTheRightValueAndUnitDataProvider */
     public function testItFormatsToTheRightValueAndUnit($inputKg, $expectedString)
     {
-        $weight = Weight::fromKg($inputKg);
-        $this->assertEquals($expectedString, $weight->__toString());
+        $mass = Mass::fromKg($inputKg);
+        $this->assertEquals($expectedString, $mass->__toString());
     }
 
     public function testSettingPrecisionWorks()
     {
-        $weight = Weight::fromKg(21234567.1234);
-        $this->assertEquals(21234.57, $weight->format()->value);
-        $this->assertEquals('t', $weight->format()->unit);
+        $mass = Mass::fromKg(21234567.1234);
+        $this->assertEquals(21234.57, $mass->format()->value);
+        $this->assertEquals('t', $mass->format()->unit);
 
-        $this->assertEquals(21234.6, $weight->format(1)->value);
-        $this->assertEquals('21234.6 t', $weight->format(1)->__toString());
-        $this->assertEquals(21234.5671, $weight->format(4)->value);
-        $this->assertEquals('21234.5671 t', $weight->format(4)->__toString());
+        $this->assertEquals(21234.6, $mass->format(1)->value);
+        $this->assertEquals('21234.6 t', $mass->format(1)->__toString());
+        $this->assertEquals(21234.5671, $mass->format(4)->value);
+        $this->assertEquals('21234.5671 t', $mass->format(4)->__toString());
     }
 }
