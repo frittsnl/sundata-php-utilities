@@ -42,7 +42,7 @@ class Energy implements Measurement
         return $this->wattHour / 1E12;
     }
 
-    public function format(?int $precision = 2): FormattedMeasurement
+    public function format(int $precision = 2): FormattedMeasurement
     {
         if ($this->wattHour >= 1E13) {
             return new FormattedMeasurement(
