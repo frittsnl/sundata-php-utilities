@@ -39,7 +39,7 @@ class EnergyTest extends TestCase
         $this->assertEquals($expectedUnit, $formattedMeasurement->unit);
     }
 
-    public function testFormatsToTheRightValueAndUnitDataProvider(): array
+    public function formatsToTheRightValueAndUnitDataProvider(): array
     {
         return [
             [54321, '54.32 MWh'],
@@ -52,7 +52,7 @@ class EnergyTest extends TestCase
         ];
     }
 
-    /** @dataProvider testFormatsToTheRightValueAndUnitDataProvider */
+    /** @dataProvider formatsToTheRightValueAndUnitDataProvider */
     public function testItFormatsToTheRightValueAndUnit($inputKwh, $expectedString)
     {
         $energy = Energy::fromKwh($inputKwh);
