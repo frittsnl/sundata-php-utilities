@@ -23,7 +23,9 @@ class PeriodOverlapTest extends TestCase
         );
 
         $this->assertEquals(null, $periodA->getOverlap($periodB));
+        $this->assertFalse($periodA->hasOverlap($periodB));
         $this->assertEquals(null, $periodB->getOverlap($periodA));
+        $this->assertFalse($periodB->hasOverlap($periodA));
     }
 
     public function testGettingTheOverlapOnTheSamePeriodReturnsTheSamePeriod()
@@ -34,6 +36,7 @@ class PeriodOverlapTest extends TestCase
         );
 
         $this->assertEquals($periodA, $periodA->getOverlap($periodA));
+        $this->assertTrue($periodA->hasOverlap($periodA));
     }
 
     public function testFullOverlapReturnsTheSamePeriod()
@@ -50,6 +53,8 @@ class PeriodOverlapTest extends TestCase
 
         $this->assertEquals($periodA, $periodA->getOverlap($periodB));
         $this->assertEquals($periodA, $periodB->getOverlap($periodA));
+        $this->assertTrue($periodA->hasOverlap($periodB));
+        $this->assertTrue($periodB->hasOverlap($periodA));
     }
 
     public function testPartialOverlapAtTheStart()

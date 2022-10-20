@@ -107,10 +107,11 @@ class Period
     {
         $min = $this->getStart()->max( $periodB->getStart());
         $max = $this->getEnd()->min( $periodB->getEnd());
-        if($min->isBefore($max) ){
-            return new Period($min,$max);
-        }
+        return $min->isBefore($max) ? new Period($min,$max) : null;
+    }
 
-        return null;
+    public function hasOverlap(Period $periodB): bool
+    {
+        return (bool)$this->getOverlap($periodB);
     }
 }
