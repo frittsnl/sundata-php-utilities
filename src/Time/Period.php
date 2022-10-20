@@ -102,4 +102,15 @@ class Period
         }
         return $result;
     }
+
+    public function getOverlap(Period $periodB): ?Period
+    {
+        $min = $this->getStart()->max( $periodB->getStart());
+        $max = $this->getEnd()->min( $periodB->getEnd());
+        if($min->isBefore($max) ){
+            return new Period($min,$max);
+        }
+
+        return null;
+    }
 }
