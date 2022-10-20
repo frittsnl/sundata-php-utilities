@@ -10,106 +10,101 @@ use PHPUnit\Framework\TestCase;
 class PeriodOverlapTest extends TestCase
 {
 
-    public function testPeriodsThatDontOverlapReturnNull()
+    public function periodOverlapDataProvider(): \Generator
     {
-        $periodA = new Period(
-            CarbonImmutable::create(2000, 1,15),
-            CarbonImmutable::create(2000, 10,15)
-        );
+        yield 'No overlap returns null' => [
+            new Period(
+                CarbonImmutable::create(2000, 1, 15),
+                CarbonImmutable::create(2000, 10, 15)
+            ),
+            new Period(
+                CarbonImmutable::create(2001, 1, 15),
+                CarbonImmutable::create(2001, 10, 15)
+            ),
+            null
+        ];
 
+        $periodA = new Period(
+            CarbonImmutable::create(2000, 1, 15),
+            CarbonImmutable::create(2000, 10, 15)
+        );
+        yield 'Getting overlap with same period returns the same period' => [
+            $periodA,
+            $periodA,
+            $periodA
+        ];
+
+        $periodA = new Period(
+            CarbonImmutable::create(2000, 1, 15),
+            CarbonImmutable::create(2000, 10, 15)
+        );
+        yield 'Full overlap returns the same period' => [
+            $periodA,
+            new Period(
+                CarbonImmutable::create(1900, 1, 15),
+                CarbonImmutable::create(2100, 10, 15)
+            ),
+            $periodA
+        ];
+
+        $periodA = new Period(
+            CarbonImmutable::create(2000, 1, 15),
+            CarbonImmutable::create(2000, 10, 15)
+        );
         $periodB = new Period(
-            CarbonImmutable::create(2001, 1,15),
-            CarbonImmutable::create(2001, 10,15)
+            CarbonImmutable::create(1999, 1, 15),
+            CarbonImmutable::create(2000, 5, 15)
         );
-
-        $this->assertEquals(null, $periodA->getOverlap($periodB));
-        $this->assertFalse($periodA->hasOverlap($periodB));
-        $this->assertEquals(null, $periodB->getOverlap($periodA));
-        $this->assertFalse($periodB->hasOverlap($periodA));
-    }
-
-    public function testGettingTheOverlapOnTheSamePeriodReturnsTheSamePeriod()
-    {
-        $periodA = new Period(
-            CarbonImmutable::create(2000, 1,15),
-            CarbonImmutable::create(2000, 10,15)
-        );
-
-        $this->assertEquals($periodA, $periodA->getOverlap($periodA));
-        $this->assertTrue($periodA->hasOverlap($periodA));
-    }
-
-    public function testFullOverlapReturnsTheSamePeriod()
-    {
-        $periodA = new Period(
-            CarbonImmutable::create(2000, 1,15),
-            CarbonImmutable::create(2000, 10,15)
-        );
-
-        $periodB = new Period(
-            CarbonImmutable::create(1900, 1,15),
-            CarbonImmutable::create(2100, 10,15)
-        );
-
-        $this->assertEquals($periodA, $periodA->getOverlap($periodB));
-        $this->assertEquals($periodA, $periodB->getOverlap($periodA));
-        $this->assertTrue($periodA->hasOverlap($periodB));
-        $this->assertTrue($periodB->hasOverlap($periodA));
-    }
-
-    public function testPartialOverlapAtTheStart()
-    {
-        $periodA = new Period(
-            CarbonImmutable::create(2000, 1,15),
-            CarbonImmutable::create(2000, 10,15)
-        );
-
-        $periodB = new Period(
-            CarbonImmutable::create(1999, 1,15),
-            CarbonImmutable::create(2000, 5,15)
-        );
-
         $expectedOutcome = new Period(
             $periodA->getStart(),
             $periodB->getEnd()
         );
-        $this->assertEquals($expectedOutcome, $periodA->getOverlap($periodB));
-        $this->assertEquals($expectedOutcome, $periodB->getOverlap($periodA));
-    }
+        yield 'Partial overlapping the start and ending somewhere in the period' => [
+            $periodA,
+            $periodB,
+            $expectedOutcome
+        ];
 
-    public function testPartialOverlapAtTheEnd()
-    {
         $periodA = new Period(
-            CarbonImmutable::create(2000, 1,15),
-            CarbonImmutable::create(2000, 10,15)
+            CarbonImmutable::create(2000, 1, 15),
+            CarbonImmutable::create(2000, 10, 15)
         );
 
         $periodB = new Period(
-            CarbonImmutable::create(2000, 5,15),
-            CarbonImmutable::create(2100, 1,1)
+            CarbonImmutable::create(2000, 5, 15),
+            CarbonImmutable::create(2100, 1, 1)
         );
 
         $expectedOutcome = new Period(
             $periodB->getStart(),
             $periodA->getEnd()
         );
-        $this->assertEquals($expectedOutcome, $periodA->getOverlap($periodB));
-        $this->assertEquals($expectedOutcome, $periodB->getOverlap($periodA));
+        yield 'Starting somewhere in the period and overlapping the end' => [
+            $periodA,
+            $periodB,
+            $expectedOutcome
+        ];
+
+        yield 'There is no overlap (period A is outside of period B)' => [
+            new Period(
+                CarbonImmutable::create(2000, 1, 15),
+                CarbonImmutable::create(2000, 10, 15)
+            ),
+            new Period(
+                CarbonImmutable::create(1900, 1, 15),
+                CarbonImmutable::create(1910, 1, 1)
+            ),
+            null
+        ];
     }
 
-    public function testPeriodIsOutsideOfPeriodB()
+    /**
+     * @dataProvider periodOverlapDataProvider
+     */
+    public function testPeriodOverlap(Period $periodA, Period $periodB, $expected)
     {
-        $periodA = new Period(
-            CarbonImmutable::create(2000, 1,15),
-            CarbonImmutable::create(2000, 10,15)
-        );
-
-        $periodB = new Period(
-            CarbonImmutable::create(1900, 1,15),
-            CarbonImmutable::create(1910, 1,1)
-        );
-
-        $this->assertEquals(null, $periodA->getOverlap($periodB));
-        $this->assertEquals(null, $periodB->getOverlap($periodA));
+        $this->assertEquals($expected, $periodA->getOverlap($periodB));
+        $this->assertEquals($expected, $periodB->getOverlap($periodA));
+        $this->assertSame(!($expected == null), $periodB->hasOverlap($periodA));
     }
 }
