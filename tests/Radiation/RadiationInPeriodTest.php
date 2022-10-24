@@ -113,6 +113,37 @@ class RadiationInPeriodTest extends TestCase
             $expectedDecember + $expectedJanuary,
             1.392 + 1.815
         ];
+
+        yield 'full year - december' => [
+            '2018-01-01',
+            '2018-12-01',
+            386751 - $expectedDecember,
+            100.0 - 1.392
+        ];
+
+        // - - -
+
+        $expectedJuneJuly = 116128;
+        yield 'June and July' => [
+            '2019-06-01',
+            '2019-08-01',
+            $expectedJuneJuly,
+            30.03
+        ];
+
+        yield 'full year - (June and July)' => [
+            '2019-08-01',
+            '2020-06-01',
+            386751 - $expectedJuneJuly,
+            100.0 - 30.03
+        ];
+
+        yield ' 2 full year - (June and July)' => [
+            '2018-08-01',
+            '2020-06-01',
+            386751 + 386751 - $expectedJuneJuly,
+            200.0 - 30.03
+        ];
     }
 
     /**
