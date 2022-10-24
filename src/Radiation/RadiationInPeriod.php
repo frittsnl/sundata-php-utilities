@@ -19,8 +19,8 @@ class RadiationInPeriod
 
         $periods = DateSplitter::splitPeriodInYears($period);
         $radiation = 0;
-        foreach ($periods as $period) {
-            $radiation += self::getAvgRadiationWithin1Year($period);
+        foreach ($periods as $subPeriod) {
+            $radiation += self::getAvgRadiationWithin1Year($subPeriod);
         }
         return $radiation;
     }
