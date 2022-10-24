@@ -3,50 +3,84 @@
 namespace Sundata\Utilities\Test\Radiation;
 
 use Carbon\CarbonImmutable;
+use Generator;
 use PHPUnit\Framework\TestCase;
 use Sundata\Utilities\Radiation\RadiationInPeriod;
 use Sundata\Utilities\Time\Period;
 
 class RadiationInPeriodTest extends TestCase
 {
-
-    public function RadiationInPeriodDataProvider(): \Generator
+    public function RadiationInPeriodDataProvider(): Generator
     {
-        yield 'Full year' => [
+        yield 'Full year, but you forget end-is-exclusive' => [
             '2019-01-01',
             '2019-12-31',
-            386585.1429,
-            100.0
+            386519,
+            99.94
+        ];
+
+        yield 'Actual full year' => [
+            '2019-01-01',
+            '2020-01-01',
+            386751,
+            100.000
         ];
 
         yield 'Full leap year is the same value as regular year' => [
             '2020-01-01',
-            '2020-12-31',
-            386585.1429,
-            100.0
+            '2021-01-01',
+            386751,
+            100.000
+        ];
+
+        yield "year starting in june" => [
+            '2021-06-01',
+            '2022-06-01',
+            386751,
+            100.000
+        ];
+
+        yield "year starting in june of a leap year (shouldn't matter)" => [
+            '2020-06-01',
+            '2021-06-01',
+            386751,
+            100.000
+        ];
+
+        yield 'first day of the year' => [
+            '2020-01-01',
+            '2020-01-02',
+            166,
+            0.04
         ];
 
         yield 'Only August' => [
             '2020-08-01',
             '2020-08-31',
-            46749.285799999954,
-            12.1
+            47638,
+            12.32
         ];
 
         yield 'October to March (stepping into a new year)' => [
             '2019-10-01',
             '2020-03-31',
-            83741.42865999995,
-            21.7
+            82165,
+            21.245
         ];
 
         yield 'October 2018 to March 2020 (more than 1 year)' => [
             '2018-10-01',
             '2020-03-31',
-            470492.57155999995,
-            100.0 + 21.7
+            468916,
+            100.0 + 21.245
         ];
 
+        yield 'End of year' => [
+            '2018-12-31',
+            '2019-01-01',
+            232,
+            0.06
+        ];
     }
 
     /** @dataProvider RadiationInPeriodDataProvider */
@@ -55,10 +89,17 @@ class RadiationInPeriodTest extends TestCase
         $end,
         $expectedRadiation,
         $expectedPercentageOf7YAverage
-    )
-    {
+    ) {
         $period = new Period(CarbonImmutable::parse($start), CarbonImmutable::parse($end));
-        $this->assertSame($expectedRadiation, RadiationInPeriod::getAvgRadiation($period));
-        $this->assertSame($expectedPercentageOf7YAverage, RadiationInPeriod::getRadiationPercentageOf7YAverage($period));
+        $this->assertEqualsWithDelta(
+            $expectedRadiation,
+            RadiationInPeriod::getAvgRadiation($period),
+            0.01
+        );
+        $this->assertEqualsWithDelta(
+            $expectedPercentageOf7YAverage,
+            RadiationInPeriod::getRadiationPercentageOf7YAverage($period),
+            0.01
+        );
     }
 }
