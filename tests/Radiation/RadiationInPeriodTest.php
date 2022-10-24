@@ -40,6 +40,13 @@ class RadiationInPeriodTest extends TestCase
             100.000
         ];
 
+        yield "lead year starting in june" => [
+            '2020-05-01T00:00:00+00:00',
+            '2021-05-01T00:00:00+00:00',
+            386751,
+            100.000
+        ];
+
         yield "year starting in june of a leap year (shouldn't matter)" => [
             '2020-06-01',
             '2021-06-01',
@@ -83,7 +90,35 @@ class RadiationInPeriodTest extends TestCase
         ];
     }
 
-    /** @dataProvider RadiationInPeriodDataProvider */
+    public function sumDataProvider(): Generator
+    {
+        $expectedDecember = 5385;
+        yield 'December' => [
+            '2018-12-01',
+            '2019-01-01',
+            $expectedDecember,
+            1.392
+        ];
+        $expectedJanuary = 7019;
+        yield 'January' => [
+            '2019-01-01',
+            '2019-02-01',
+            $expectedJanuary,
+            1.815
+        ];
+
+        yield 'December + January' => [
+            '2018-12-01',
+            '2019-02-01',
+            $expectedDecember + $expectedJanuary,
+            1.392 + 1.815
+        ];
+    }
+
+    /**
+     * @dataProvider RadiationInPeriodDataProvider
+     * @dataProvider sumDataProvider
+     */
     public function testItReturnsTheRadiationForAPeriod(
         $start,
         $end,
