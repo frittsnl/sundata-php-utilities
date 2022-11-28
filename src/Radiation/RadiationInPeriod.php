@@ -3,6 +3,7 @@
 
 namespace Sundata\Utilities\Radiation;
 
+use Carbon\Carbon;
 use InvalidArgumentException;
 use Sundata\Utilities\Time\DateSplitter;
 use Sundata\Utilities\Time\Period;
@@ -29,6 +30,14 @@ class RadiationInPeriod
     {
         $radiation = self::getAvgRadiation($period);
         return ($radiation * 100) / self::getYearTotal();
+    }
+
+    public static function getAvgRadiationForJulian(int $julian, $year = 1999): int
+    {
+        $date = Carbon::create($year)->addDays($julian - 1)->toImmutable();
+        $startMD = $date->format('m-d');
+        $endMD = $startMD === '12-31' ? 'year' : $date->addDay()->format('m-d');
+        return self::AVG_CUM_RADIATION_PER_DAY[$endMD] - self::AVG_CUM_RADIATION_PER_DAY[$startMD];
     }
 
     private static function getYearTotal()
@@ -85,7 +94,7 @@ class RadiationInPeriod
     }
 
     // seven year (2014-2020) average,
-    const AVG_CUM_RADIATION_PER_DAY = [
+    private const AVG_CUM_RADIATION_PER_DAY = [
         "01-01" => 0,
         "01-02" => 166,
         "01-03" => 347,

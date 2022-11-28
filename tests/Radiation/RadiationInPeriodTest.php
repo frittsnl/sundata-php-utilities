@@ -2,6 +2,7 @@
 
 namespace Sundata\Utilities\Test\Radiation;
 
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Generator;
 use PHPUnit\Framework\TestCase;
@@ -166,6 +167,26 @@ class RadiationInPeriodTest extends TestCase
             $expectedPercentageOf7YAverage,
             RadiationInPeriod::getRadiationPercentageOf7YAverage($period),
             0.01
+        );
+    }
+
+    function avgRadiationForDayProvider(): Generator
+    {
+        yield '1jan' => [1, 166, 1999];
+        yield '20 aug' => [Carbon::parse('2011-08-20')->dayOfYear, 1610, 1999];
+        yield '31 dec' => [365, 232, 1999];
+        yield '31 dec on leap' => [366, 232, 2000];
+    }
+
+    /** @dataProvider avgRadiationForDayProvider */
+    function testAvgRadiationForJulian(
+        int  $julian,
+        int  $expectedRad,
+        int $year
+    ) {
+        $this->assertEquals(
+            $expectedRad,
+            RadiationInPeriod::getAvgRadiationForJulian($julian, $year)
         );
     }
 }
