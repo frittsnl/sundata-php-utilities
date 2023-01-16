@@ -48,13 +48,12 @@ class MeterRadiationTest extends TestCase
 
     /** @dataProvider MeterRadiationDataProvider */
     public function testItReturnsMeterIrradiance(
-        MeterFacts $request,
+        MeterFacts      $request,
         CarbonImmutable $dateTime,
-        float $globalIrradiance,
-        float $expectedIrradiance
-    )
-    {
+        float           $globalIrradiance,
+        float           $expectedIrradiance
+    ) {
         $rad = MeterRadiation::calculateIrradianceForDateTime($request, $dateTime, $globalIrradiance);
-        self::assertEquals($expectedIrradiance, $rad);
+        $this->assertEqualsWithDelta($expectedIrradiance, $rad, 1E-9);
     }
 }

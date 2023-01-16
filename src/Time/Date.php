@@ -72,4 +72,14 @@ class Date
             $this->timezone
         );
     }
+
+    public function timezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    public function hasTimezone(): bool
+    {
+        return $this->timezone !== null;
+    }
 }
