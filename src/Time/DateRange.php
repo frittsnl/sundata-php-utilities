@@ -68,13 +68,22 @@ class DateRange
     {
         $timezone = $this->from->timezone();
 
-        if( $this->from->toDateString() === $this->to->toDateString()){
+        if ($this->from->toDateString() === $this->to->toDateString()) {
             return [];
         }
 
         return array_map(
             fn(Period $day) => Date::of($day->getStart()->toDateString(), $timezone),
             DateSplitter::splitInDays(...$this->fromToAsCarbon())
+        );
+    }
+
+    function toString(): string
+    {
+        return sprintf("DateRange: %s to %s@%s",
+            $this->from->toDateString(),
+            $this->to->toDateString(),
+            $this->from()->hasTimezone() ? $this->from()->timezone() : '<none>'
         );
     }
 }

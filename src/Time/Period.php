@@ -64,11 +64,6 @@ class Period
         return $date->isBetween($this->startDate, $this->endDate);
     }
 
-    /**
-     * Use __toString instead
-     * @return string
-     * @deprecated
-     */
     public function toString(): string
     {
         return $this->__toString();
@@ -105,9 +100,9 @@ class Period
 
     public function getOverlap(Period $periodB): ?Period
     {
-        $min = $this->getStart()->max( $periodB->getStart());
-        $max = $this->getEnd()->min( $periodB->getEnd());
-        return $min->isBefore($max) ? new Period($min,$max) : null;
+        $min = $this->getStart()->max($periodB->getStart());
+        $max = $this->getEnd()->min($periodB->getEnd());
+        return $min->isBefore($max) ? new Period($min, $max) : null;
     }
 
     public function hasOverlap(Period $periodB): bool

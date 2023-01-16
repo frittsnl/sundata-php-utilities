@@ -64,4 +64,16 @@ class DateRangeTest extends TestCase
             Date::of('2022-02-12', 'Europe/London')
         );
     }
+
+    function testToString()
+    {
+        $dateRange = DateRange::ofStrings(
+            '2021-01-03',
+            '2021-01-13',
+        );
+        $this->assertEquals(
+            'DateRange: 2021-01-03 to 2021-01-13@<none>',
+            $dateRange->toString()
+        );
+    }
 }

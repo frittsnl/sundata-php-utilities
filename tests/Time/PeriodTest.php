@@ -123,4 +123,22 @@ class PeriodTest extends TestCase
         $this->assertEquals(975110400, $period->inSeconds());
 
     }
+
+    function testToString()
+    {
+        $period = new Period(
+            CarbonImmutable::parse('1988-08-20'),
+            CarbonImmutable::parse('2019-07-15')
+        );
+        $expectedPeriodString = "Period[1988-08-20T00:00:00+00:00;2019-07-15T00:00:00+00:00]";
+        $this->assertEquals(
+            $expectedPeriodString,
+            $period->toString()
+        );
+
+        $this->assertEquals(
+            "some string: " . $expectedPeriodString,
+            "some string: " . $period
+        );
+    }
 }
