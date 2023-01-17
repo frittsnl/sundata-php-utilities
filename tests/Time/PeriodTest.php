@@ -51,7 +51,7 @@ class PeriodTest extends TestCase
       'Before start' =>    [$defaultStart, $defaultEnd, '1999-01-01T00:11:00+01:00', false],
       'After end' =>       [$defaultStart, $defaultEnd, '2001-01-01T00:11:00+01:00', false],
       'Same as start' =>   [$defaultStart, $defaultEnd, $defaultStart, true],
-      'Same as end' =>     [$defaultStart, $defaultEnd, $defaultEnd, true],
+      'Same as end' =>     [$defaultStart, $defaultEnd, $defaultEnd, false],
     ];
     //@formatter:on
     }

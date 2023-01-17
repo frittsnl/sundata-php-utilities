@@ -3,6 +3,7 @@
 namespace Sundata\Utilities\Time;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use InvalidArgumentException;
 
 class DateRange
@@ -76,6 +77,15 @@ class DateRange
             fn(Period $day) => Date::of($day->getStart()->toDateString(), $timezone),
             DateSplitter::splitInDays(...$this->fromToAsCarbon())
         );
+    }
+
+    public function contains(CarbonInterface $carbon): bool
+    {
+        if (!$this->from->hasTimezone()) {
+            throw new InvalidArgumentException("Can't check 'contains' when timezones haven't been set.");
+        }
+        $period = new Period(...$this->fromToAsCarbon());
+        return $period->isInPeriod($carbon);
     }
 
     function toString(): string
