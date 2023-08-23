@@ -82,4 +82,29 @@ class Date
     {
         return $this->timezone !== null;
     }
+
+    public function setTimezone(string $tz): Date
+    {
+        return Date::of($this->toDateString(), $tz);
+    }
+
+    public function isBefore(Date $date): bool
+    {
+        return $this->toDateString() < $date->toDateString();
+    }
+
+    public function isAfter(Date $date): bool
+    {
+        return $this->toDateString() > $date->toDateString();
+    }
+
+    public function max(Date $date): Date
+    {
+        return $this->isAfter($date) ? $this : $date;
+    }
+
+    public function min(Date $date): Date
+    {
+        return $this->isBefore($date) ? $this : $date;
+    }
 }
