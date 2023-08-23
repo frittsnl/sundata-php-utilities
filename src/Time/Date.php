@@ -25,7 +25,7 @@ class Date
 
     static function of(string $dateString, ?string $timezone = null): Date
     {
-        if (!preg_match('/^20\d{2}-[01]\d-[0123]\d$/', $dateString)) {
+        if (!preg_match('/^(19|20)\d{2}-[01]\d-[0123]\d$/', $dateString)) {
             throw new InvalidArgumentException('Invalid date format. Use 20YY-MM-DD');
         }
         if ($timezone && !in_array($timezone, DateTimeZone::listIdentifiers())) {

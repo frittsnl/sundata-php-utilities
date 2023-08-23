@@ -108,4 +108,11 @@ class DateTest extends TestCase
             $dateA->max($dateB)
         );
     }
+
+    public function testBeforeY2K()
+    {
+        foreach (['2000-01-01', '1999-12-31'] as $date) {
+            $this->assertEquals($date, Date::of($date)->toDateString());
+        }
+    }
 }
