@@ -66,4 +66,46 @@ class DateTest extends TestCase
                 ->toDateString()
         );
     }
+
+    function isBeforeAndIsAfterDataProvider(): array
+    {
+        return [
+            ['2021-01-01', '2021-01-02', true, false],
+            ['2021-01-02', '2021-01-01', false, false],
+            ['2021-01-01', '2021-01-01', false, true],
+        ];
+    }
+
+    /** @dataProvider isBeforeAndIsAfterDataProvider */
+    function testIsBeforeAndIsAfterAndMinAndMax(
+        $dateStringA,
+        $dateStringB,
+        bool $aBeforeB,
+        bool $aEqualsB
+    ) {
+        $dateA = Date::of($dateStringA);
+        $dateB = Date::of($dateStringB);
+
+        if ($aEqualsB) {
+            $this->assertEquals(false, $dateA->isBefore($dateB));
+            $this->assertEquals(false, $dateA->isAfter($dateB));
+            $this->assertEquals(false, $dateB->isBefore($dateA));
+            $this->assertEquals(false, $dateB->isAfter($dateA));
+
+        } else {
+            $this->assertEquals($aBeforeB, $dateA->isBefore($dateB));
+            $this->assertEquals(!$aBeforeB, $dateA->isAfter($dateB));
+            $this->assertEquals(!$aBeforeB, $dateB->isBefore($dateA));
+            $this->assertEquals($aBeforeB, $dateB->isAfter($dateA));
+        }
+
+        $this->assertEquals(
+            $aBeforeB ? $dateA : $dateB,
+            $dateA->min($dateB)
+        );
+        $this->assertEquals(
+            $aBeforeB ? $dateB : $dateA,
+            $dateA->max($dateB)
+        );
+    }
 }
