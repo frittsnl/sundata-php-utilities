@@ -4,9 +4,12 @@ namespace Sundata\Utilities\Measurement;
 
 class Radiation implements Measurement
 {
-    private function __construct(
-        private int $jcm2
-    ) { }
+    private int $jcm2;
+
+    private function __construct(int $jcm2)
+    {
+        $this->jcm2 = $jcm2;
+    }
 
     static function fromJcm2(int $jcm2): Radiation
     {
