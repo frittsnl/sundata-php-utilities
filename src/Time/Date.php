@@ -35,6 +35,7 @@ class Date
     }
 
     /**
+     * @deprecated use DateTz instead
      * Only possible when timezone has been set
      * Will convert to the START of the day that is
      * associated with the date
@@ -55,6 +56,14 @@ class Date
         return $this->dateString;
     }
 
+    function toDateTz(?string $timezone = null): DateTz
+    {
+        if (!$this->hasTimezone() && is_null($timezone)) {
+            throw new InvalidArgumentException("Timezone missing. Can't convert to DateTz");
+        }
+        return DateTz::of($this->dateString, $timezone ?? $this->timezone);
+    }
+
     function toString(): string
     {
         return sprintf("Date: %s@%s",
@@ -73,16 +82,19 @@ class Date
         );
     }
 
+    /** @deprecated use DateTz instead */
     public function timezone(): ?string
     {
         return $this->timezone;
     }
 
+    /** @deprecated use DateTz instead */
     public function hasTimezone(): bool
     {
         return $this->timezone !== null;
     }
 
+    /** @deprecated use DateTz instead */
     public function setTimezone(string $tz): Date
     {
         return Date::of($this->toDateString(), $tz);
