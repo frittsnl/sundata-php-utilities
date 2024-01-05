@@ -4,46 +4,42 @@ namespace Sundata\Utilities\Test\Time;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Sundata\Utilities\Time\Date;
+use Sundata\Utilities\Time\DateTz;
 
-class DateTest extends TestCase
+class DateTzTest extends TestCase
 {
+    const DEFAULT_TZ = 'Europe/Amsterdam';
+
     function testInvalidDateFormatShouldFail()
     {
         $this->expectException(InvalidArgumentException::class);
-        Date::of('22-02-22');
-    }
-
-    function testCantConvertedToCarbonWithoutTimezone()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        Date::of('2021-01-01')->asCarbonImmutable();
+        DateTz::of('22-02-22', self::DEFAULT_TZ);
     }
 
     function testCantHaveWeirdTimezone()
     {
         $this->expectException(InvalidArgumentException::class);
         /** @noinspection SpellCheckingInspection */
-        Date::of('2021-01-01', 'muhlocaltime');
+        DateTz::of('2021-01-01', 'muhlocaltime');
     }
 
     function testConvertToCarbon()
     {
-        $date = Date::of('2021-01-01', 'Europe/Amsterdam');
+        $date = DateTz::of('2021-01-01', 'Europe/Amsterdam');
         $carbon = $date->asCarbonImmutable();
         $this->assertEquals('2021-01-01T00:00:00+01:00', $carbon->toRfc3339String());
     }
 
     function testAddDays()
     {
-        $date = Date::of('2021-01-01', 'Europe/Amsterdam');
+        $date = DateTz::of('2021-01-01', 'Europe/Amsterdam');
         $dateADayLater = $date->addDays(1);
         $this->assertEquals('2021-01-02', $dateADayLater->toDateString());
     }
 
     function testAddDaysLeaveOriginalUnChanged()
     {
-        $date = Date::of('2021-01-01', 'UTC');
+        $date = DateTz::of('2021-01-01', 'UTC');
         $date->addDays(1);
         $this->assertEquals('2021-01-01', $date->toDateString());
     }
@@ -52,7 +48,7 @@ class DateTest extends TestCase
     {
         $this->assertEquals(
             '2020-12-30',
-            Date::of('2021-01-01')
+            DateTz::of('2021-01-01', self::DEFAULT_TZ)
                 ->addDays(-2)
                 ->toDateString()
         );
@@ -62,7 +58,7 @@ class DateTest extends TestCase
     {
         $this->assertEquals(
             '2021-02-02',
-            Date::of('2021-02-02')
+            DateTz::of('2021-02-02', self::DEFAULT_TZ)
                 ->addDays(-0)
                 ->toDateString()
         );
@@ -84,8 +80,8 @@ class DateTest extends TestCase
         bool $aBeforeB,
         bool $aEqualsB
     ) {
-        $dateA = Date::of($dateStringA);
-        $dateB = Date::of($dateStringB);
+        $dateA = DateTz::of($dateStringA, self::DEFAULT_TZ);
+        $dateB = DateTz::of($dateStringB, self::DEFAULT_TZ);
 
         if ($aEqualsB) {
             $this->assertEquals(false, $dateA->isBefore($dateB));
@@ -113,7 +109,7 @@ class DateTest extends TestCase
     public function testBeforeY2K()
     {
         foreach (['2000-01-01', '1999-12-31'] as $date) {
-            $this->assertEquals($date, Date::of($date)->toDateString());
+            $this->assertEquals($date, DateTz::of($date, self::DEFAULT_TZ)->toDateString());
         }
     }
 }
