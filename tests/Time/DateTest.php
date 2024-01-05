@@ -23,6 +23,7 @@ class DateTest extends TestCase
     function testCantHaveWeirdTimezone()
     {
         $this->expectException(InvalidArgumentException::class);
+        /** @noinspection SpellCheckingInspection */
         Date::of('2021-01-01', 'muhlocaltime');
     }
 
