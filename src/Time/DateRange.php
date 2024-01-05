@@ -33,6 +33,7 @@ class DateRange
         return $dateRange;
     }
 
+    /** @deprecated timezone argument will be removed in the future */
     public static function ofStrings(string $from, string $to, ?string $timezone = null): DateRange
     {
         return self::of(
@@ -79,6 +80,7 @@ class DateRange
         );
     }
 
+    /** @deprecated use DateRangeTz->contains instead */
     public function contains(CarbonInterface $carbon): bool
     {
         if (!$this->from->hasTimezone()) {
