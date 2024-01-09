@@ -3,7 +3,7 @@
 namespace Sundata\Utilities\Sun;
 
 use Carbon\CarbonImmutable;
-use Sundata\Utilities\Time\Date;
+use Sundata\Utilities\Time\DateTz;
 
 /**
  * Wrapper date_sun_info (php native)
@@ -24,7 +24,7 @@ class SunInfo
     static function of(
         float $lat,
         float $lon,
-        Date  $date
+        DateTz  $date
     ): SunInfo {
         $carbon = $date->asCarbonImmutable();
         return new SunInfo(
@@ -39,7 +39,7 @@ class SunInfo
 
     /** For when needing a general idea of the SunInfo in the Netherlands. */
     static function ofUtrecht(
-        Date $date
+        DateTz $date
     ): SunInfo {
         return SunInfo::of(52.0906894, 5.1213124, $date); //Domtoren
     }

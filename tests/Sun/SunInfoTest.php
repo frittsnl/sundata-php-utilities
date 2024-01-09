@@ -2,9 +2,9 @@
 
 namespace Sundata\Utilities\Test\Sun;
 
-use Sundata\Utilities\Sun\SunInfo;
-use Sundata\Utilities\Time\Date;
 use PHPUnit\Framework\TestCase;
+use Sundata\Utilities\Sun\SunInfo;
+use Sundata\Utilities\Time\DateTz;
 
 class SunInfoTest extends TestCase
 {
@@ -12,7 +12,7 @@ class SunInfoTest extends TestCase
     {
         $lat = 52.0532538;
         $lon = 5.3180957;
-        $date = Date::of('2022-08-08', 'Europe/Amsterdam');
+        $date = DateTz::of('2022-08-08', 'Europe/Amsterdam');
 
         $sunInfo = SunInfo::of($lat, $lon, $date);
 
@@ -27,7 +27,7 @@ class SunInfoTest extends TestCase
     {
         $lat = 52.0532538;
         $lon = 5.3180957;
-        $date = Date::of('2022-08-08', 'Europe/Amsterdam');
+        $date = DateTz::of('2022-08-08', 'Europe/Amsterdam');
 
         $sunInfo = SunInfo::of($lat, $lon, $date);
 

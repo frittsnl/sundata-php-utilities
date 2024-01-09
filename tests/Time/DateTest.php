@@ -14,36 +14,16 @@ class DateTest extends TestCase
         Date::of('22-02-22');
     }
 
-    function testCantConvertedToCarbonWithoutTimezone()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        Date::of('2021-01-01')->asCarbonImmutable();
-    }
-
-    function testCantHaveWeirdTimezone()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        /** @noinspection SpellCheckingInspection */
-        Date::of('2021-01-01', 'muhlocaltime');
-    }
-
-    function testConvertToCarbon()
-    {
-        $date = Date::of('2021-01-01', 'Europe/Amsterdam');
-        $carbon = $date->asCarbonImmutable();
-        $this->assertEquals('2021-01-01T00:00:00+01:00', $carbon->toRfc3339String());
-    }
-
     function testAddDays()
     {
-        $date = Date::of('2021-01-01', 'Europe/Amsterdam');
+        $date = Date::of('2021-01-01');
         $dateADayLater = $date->addDays(1);
         $this->assertEquals('2021-01-02', $dateADayLater->toDateString());
     }
 
     function testAddDaysLeaveOriginalUnChanged()
     {
-        $date = Date::of('2021-01-01', 'UTC');
+        $date = Date::of('2021-01-01');
         $date->addDays(1);
         $this->assertEquals('2021-01-01', $date->toDateString());
     }
