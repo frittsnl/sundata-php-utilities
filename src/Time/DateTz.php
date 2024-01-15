@@ -50,6 +50,14 @@ class DateTz
         return $this->carbon;
     }
 
+    function asPeriod(): Period
+    {
+        return new Period(
+            $this->asCarbonImmutable(),
+            $this->asCarbonImmutable()->addDay()
+        );
+    }
+
     function toDateString(): string
     {
         // for convenience
