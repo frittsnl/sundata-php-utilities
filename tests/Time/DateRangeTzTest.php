@@ -67,4 +67,21 @@ class DateRangeTzTest extends TestCase
             $dateRange->toString()
         );
     }
+
+    function periodDataProvider(): array
+    {
+        return [
+            ['2022-01-01', 'Europe/Amsterdam', '2022-01-01T00:00:00+01:00', '2022-01-02T00:00:00+01:00'],
+            ['2022-01-01', 'UTC', '2022-01-01T00:00:00+00:00', '2022-01-02T00:00:00+00:00'],
+            ['2022-02-28', 'Europe/Amsterdam', '2022-02-28T00:00:00+01:00', '2022-03-01T00:00:00+01:00'],
+        ];
+    }
+
+    /** @dataProvider periodDataProvider */
+    function testPeriod($dateString, $tz, $expectedStart3339, $expectedEnd3339)
+    {
+        $period = DateTz::of($dateString, $tz)->asPeriod();
+        $this->assertEquals($expectedStart3339, $period->getStart()->toRfc3339String());
+        $this->assertEquals($expectedEnd3339, $period->getEnd()->toRfc3339String());
+    }
 }
