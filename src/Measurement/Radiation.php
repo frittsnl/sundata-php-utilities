@@ -45,6 +45,11 @@ class Radiation implements Measurement
         );
     }
 
+    function divideBy(Radiation $irradiance): Ratio
+    {
+        return new Ratio($this->jcm2, $irradiance->asJcm2());
+    }
+
     function __toString(): string
     {
         return $this->format()->__toString();
