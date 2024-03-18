@@ -2,26 +2,34 @@
 
 namespace Sundata\Utilities\Measurement;
 
+use RuntimeException;
+
 class Ratio
 {
-    private float $numerator;
-    private float $denominator;
+    private int $numerator;
+    private int $denominator;
 
     function __construct(
         int $numerator,
         int $denominator
     ) {
+        if ($denominator === 0) {
+            throw new RuntimeException('Denominator cannot be zero');
+        }
+
         $this->numerator = $numerator;
         $this->denominator = $denominator;
     }
 
-    function asDecimalFraction(): float
-    {
-        return round($this->numerator / $this->denominator, 2);
+    function asDecimalFraction(
+        int $precision = 2
+    ): float {
+        return round($this->numerator / $this->denominator, $precision);
     }
 
-    function asPercentage(): float
-    {
-        return round($this->numerator / $this->denominator * 100, 2);
+    function asPercentage(
+        int $precision = 2
+    ): float {
+        return round($this->numerator / $this->denominator * 100, $precision);
     }
 }
