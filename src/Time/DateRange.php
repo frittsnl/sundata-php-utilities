@@ -45,6 +45,15 @@ class DateRange
         return $this->to;
     }
 
+    public function toDateRangeTz(string $timeZone): DateRangeTz
+    {
+        return DateRangeTz::ofStrings(
+            $this->from->toDateString(),
+            $this->to->toDateString(),
+            $timeZone,
+        );
+    }
+
     private function fromToAsCarbon(): array
     {
         return [
