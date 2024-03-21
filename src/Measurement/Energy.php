@@ -12,9 +12,29 @@ class Energy implements Measurement
         $this->wattHour = $wattHour;
     }
 
-    public static function fromKwh(float $kwh): Energy
+    public static function fromWh(float $wh): Energy
     {
-        return new Energy($kwh * 1000);
+        return new Energy($wh);
+    }
+
+    public static function fromKwh(float $kWh): Energy
+    {
+        return new Energy($kWh * 1E3);
+    }
+
+    public static function fromMwh(float $mWh): Energy
+    {
+        return new Energy($mWh * 1E6);
+    }
+
+    public static function fromGwh(float $gWh): Energy
+    {
+        return new Energy($gWh * 1E9);
+    }
+
+    public static function fromTwh(float $tWh): Energy
+    {
+        return new Energy($tWh * 1E12);
     }
 
     public function asWh(): float
