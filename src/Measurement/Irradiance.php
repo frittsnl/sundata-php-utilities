@@ -2,7 +2,7 @@
 
 namespace Sundata\Utilities\Measurement;
 
-class Radiation implements Measurement
+class Irradiance implements Measurement
 {
     private int $jcm2;
 
@@ -11,19 +11,19 @@ class Radiation implements Measurement
         $this->jcm2 = $jcm2;
     }
 
-    static function fromJcm2(int $jcm2): Radiation
+    static function fromJcm2(int $jcm2): Irradiance
     {
-        return new Radiation($jcm2);
+        return new Irradiance($jcm2);
     }
 
-    static function fromkJm2(int $kJm2): Radiation
+    static function fromkJm2(int $kJm2): Irradiance
     {
-        return new Radiation($kJm2 / 10);
+        return new Irradiance($kJm2 / 10);
     }
 
-    static function fromWhm2(int $whm2): Radiation
+    static function fromWhm2(int $whm2): Irradiance
     {
-        return new Radiation($whm2 * 0.36);
+        return new Irradiance($whm2 * 0.36);
     }
 
     function asJcm2(): int
@@ -50,7 +50,7 @@ class Radiation implements Measurement
         );
     }
 
-    function divideBy(Radiation $irradiance): Ratio
+    function divideBy(Irradiance $irradiance): Ratio
     {
         return new Ratio($this->jcm2, $irradiance->asJcm2());
     }

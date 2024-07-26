@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Generator;
 use PHPUnit\Framework\TestCase;
-use Sundata\Utilities\Radiation\RadiationInPeriod;
+use Sundata\Utilities\Radiation\IrradianceInPeriod;
 use Sundata\Utilities\Time\Period;
 
 class RadiationInPeriodTest extends TestCase
@@ -160,12 +160,12 @@ class RadiationInPeriodTest extends TestCase
         $period = new Period(CarbonImmutable::parse($start), CarbonImmutable::parse($end));
         $this->assertEqualsWithDelta(
             $expectedRadiation,
-            RadiationInPeriod::getAvgRadiation($period),
+            IrradianceInPeriod::getAvgRadiation($period),
             0.01
         );
         $this->assertEqualsWithDelta(
             $expectedPercentageOf7YAverage,
-            RadiationInPeriod::getRadiationPercentageOf7YAverage($period),
+            IrradianceInPeriod::getRadiationPercentageOf7YAverage($period),
             0.01
         );
     }
@@ -186,7 +186,7 @@ class RadiationInPeriodTest extends TestCase
     ) {
         $this->assertEquals(
             $expectedRad,
-            RadiationInPeriod::getAvgRadiationForJulian($julian, $year)
+            IrradianceInPeriod::getAvgRadiationForJulian($julian, $year)
         );
     }
 }

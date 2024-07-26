@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use Sundata\Utilities\Time\DateSplitter;
 use Sundata\Utilities\Time\Period;
 
-class RadiationInPeriod
+class IrradianceInPeriod
 {
     const LAST_DAY = 366;
 
