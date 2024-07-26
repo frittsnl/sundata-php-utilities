@@ -60,6 +60,26 @@ class Period
         return $this->startDate <= $date && $date < $this->endDate;
     }
 
+    public function toDateRange(): DateRange
+    {
+        return DateRange::ofStrings(
+            $this->startDate->toDateString(),
+            $this->endDate->toDateString(),
+        );
+    }
+
+    public function toDateRangeTz(
+        string $timezone = null
+    ): DateRangeTz {
+        $timezone = $timezone ?? $this->startDate->timezoneName;
+
+        return DateRangeTz::ofStrings(
+            $this->startDate->toDateString(),
+            $this->endDate->toDateString(),
+            $timezone
+        );
+    }
+
     public function toString(): string
     {
         return $this->__toString();
