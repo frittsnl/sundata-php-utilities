@@ -5,7 +5,7 @@ namespace Sundata\Utilities\Test\Radiation;
 use Carbon\CarbonImmutable;
 use Generator;
 use PHPUnit\Framework\TestCase;
-use Sundata\Utilities\Radiation\MeterRadiation;
+use Sundata\Utilities\Radiation\MeterIrradiance;
 use Sundata\Utilities\Radiation\MeterFacts;
 
 class MeterRadiationTest extends TestCase
@@ -53,7 +53,7 @@ class MeterRadiationTest extends TestCase
         float           $globalIrradiance,
         float           $expectedIrradiance
     ) {
-        $rad = MeterRadiation::calculateIrradianceForDateTime($request, $dateTime, $globalIrradiance);
+        $rad = MeterIrradiance::calculateIrradianceForDateTime($request, $dateTime, $globalIrradiance);
         $this->assertEqualsWithDelta($expectedIrradiance, $rad, 1E-9);
     }
 }

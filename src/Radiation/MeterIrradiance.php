@@ -6,7 +6,7 @@ use Carbon\CarbonImmutable;
 use Sundata\Utilities\Sun\SunOrientationAndAngle;
 use Sundata\Utilities\Sun\SunOrientationCalculation;
 
-class MeterRadiation
+class MeterIrradiance
 {
 
     /**
