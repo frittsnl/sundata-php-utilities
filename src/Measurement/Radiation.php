@@ -21,6 +21,11 @@ class Radiation implements Measurement
         return new Radiation($kJm2 / 10);
     }
 
+    static function fromWhm2(int $whm2): Radiation
+    {
+        return new Radiation($whm2 * 0.36);
+    }
+
     function asJcm2(): int
     {
         return $this->jcm2;
