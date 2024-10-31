@@ -2,7 +2,7 @@
 
 namespace Sundata\Utilities\Measurement;
 
-class Energy implements Measurement
+class Energy extends Measurement
 {
     private float $wattHour;
 
@@ -99,4 +99,13 @@ class Energy implements Measurement
         return $this->format()->__toString();
     }
 
+    protected function getValue()
+    {
+        return $this->wattHour;
+    }
+
+    static protected function fromValue($value): self
+    {
+        return Energy::fromWh($value);
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace Sundata\Utilities\Measurement;
 
-class Mass implements Measurement
+class Mass extends Measurement
 {
     private float $gram;
 
@@ -79,4 +79,13 @@ class Mass implements Measurement
         return $this->format()->__toString();
     }
 
+    protected function getValue()
+    {
+        return $this->gram;
+    }
+
+    static protected function fromValue($value): Mass
+    {
+        return Mass::fromKg($value * 1E-3);
+    }
 }

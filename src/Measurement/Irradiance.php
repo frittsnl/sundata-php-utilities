@@ -2,7 +2,7 @@
 
 namespace Sundata\Utilities\Measurement;
 
-class Irradiance implements Measurement
+class Irradiance extends Measurement
 {
     private int $jcm2;
 
@@ -50,13 +50,18 @@ class Irradiance implements Measurement
         );
     }
 
-    function divideBy(Irradiance $irradiance): Ratio
-    {
-        return new Ratio($this->jcm2, $irradiance->asJcm2());
-    }
-
     function __toString(): string
     {
         return $this->format()->__toString();
+    }
+
+    protected function getValue()
+    {
+        return $this->jcm2;
+    }
+
+    protected static function fromValue($value): self
+    {
+        return Irradiance::fromJcm2((int)$value);
     }
 }
