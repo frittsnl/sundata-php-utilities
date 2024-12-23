@@ -69,7 +69,7 @@ class Period
     }
 
     public function toDateRangeTz(
-        string $timezone = null
+        ?string $timezone = null
     ): DateRangeTz {
         $timezone = $timezone ?? $this->startDate->timezoneName;
 
