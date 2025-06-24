@@ -16,6 +16,9 @@ class PeriodMapper
             'quarter' =>    ['15m',           15 * 60]
         ]; // @formatter:on
 
+    /**
+     * @deprecated since unused, with v8
+     */
     public static function getInfluxPeriod($periodType): string
     {
         return self::MAP[$periodType][0];
