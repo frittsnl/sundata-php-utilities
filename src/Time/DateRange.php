@@ -54,6 +54,14 @@ class DateRange
         );
     }
 
+    public function asPeriod(): Period
+    {
+        return new Period(
+            $this->from->asCarbonImmutable(),
+            $this->to->asCarbonImmutable()
+        );
+    }
+
     private function fromToAsCarbon(): array
     {
         return [
