@@ -8,8 +8,7 @@ use InvalidArgumentException;
 /** Represents a date WITHOUT time */
 class Date
 {
-    /** @var string */
-    private $dateString;
+    private string $dateString;
 
     private function __construct(string $dateString)
     {
@@ -32,6 +31,11 @@ class Date
     function toDateTz(string $timezone): DateTz
     {
         return DateTz::of($this->dateString, $timezone);
+    }
+
+    public function asCarbonImmutable(): CarbonImmutable
+    {
+        return CarbonImmutable::parse($this->dateString);
     }
 
     function toString(): string
