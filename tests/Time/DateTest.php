@@ -2,6 +2,7 @@
 
 namespace Sundata\Utilities\Test\Time;
 
+use Carbon\CarbonImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Sundata\Utilities\Time\Date;
@@ -95,5 +96,17 @@ class DateTest extends TestCase
         foreach (['2000-01-01', '1999-12-31'] as $date) {
             $this->assertEquals($date, Date::of($date)->toDateString());
         }
+    }
+
+    public function testAsCarbonImmutable()
+    {
+        $date = Date::of('2025-01-01');
+        $dateAsCarbon = $date->asCarbonImmutable();
+        $expectedCarbon = CarbonImmutable::parse('2025-01-01');
+
+        self::assertEquals(
+            expected: $expectedCarbon->toIso8601ZuluString(),
+            actual  : $dateAsCarbon->toIso8601ZuluString()
+        );
     }
 }

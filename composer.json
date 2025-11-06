@@ -17,7 +17,7 @@
     }
   ],
   "require": {
-    "php": "^7.4 || ^8",
+    "php": "^8",
     "nesbot/carbon": ">=2.64 || ^3"
   },
   "require-dev": {

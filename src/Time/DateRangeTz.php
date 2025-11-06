@@ -68,6 +68,14 @@ class DateRangeTz
         );
     }
 
+    public function asPeriod(): Period
+    {
+        return new Period(
+            $this->from->asCarbonImmutable(),
+            $this->to->asCarbonImmutable()
+        );
+    }
+
     public function contains(CarbonInterface $carbon): bool
     {
         $period = new Period($this->from->asCarbonImmutable(), $this->to->asCarbonImmutable());
