@@ -38,6 +38,11 @@ class Date
         return CarbonImmutable::parse($this->dateString);
     }
 
+    public function asDateRange(): DateRange
+    {
+        return DateRange::of($this, $this->addDays(1));
+    }
+
     function toString(): string
     {
         return sprintf("Date: %s", $this->dateString);
@@ -48,6 +53,24 @@ class Date
         return new Date(
             CarbonImmutable::parse($this->dateString)
                 ->addDays($days)
+                ->toDateString()
+        );
+    }
+
+    function addMonths(int $months): Date
+    {
+        return new Date(
+            CarbonImmutable::parse($this->dateString)
+                ->addMonths($months)
+                ->toDateString()
+        );
+    }
+
+    function addYears(int $years): Date
+    {
+        return new Date(
+            CarbonImmutable::parse($this->dateString)
+                ->addYears($years)
                 ->toDateString()
         );
     }
@@ -70,5 +93,20 @@ class Date
     public function min(Date $date): Date
     {
         return $this->isBefore($date) ? $this : $date;
+    }
+
+    public function dayOfMonth(): int
+    {
+        return (int)explode('-', $this->toDateString())[2];
+    }
+
+    public function month(): int
+    {
+        return (int)explode('-', $this->toDateString())[1];
+    }
+
+    public function year(): int
+    {
+        return (int)explode('-', $this->toDateString())[0];
     }
 }

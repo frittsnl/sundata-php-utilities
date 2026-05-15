@@ -64,6 +64,22 @@ class DateTzTest extends TestCase
         );
     }
 
+    function testAddMonths()
+    {
+        $this->assertEquals('2021-02-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addMonths(1)->toDateString());
+        $this->assertEquals('2022-02-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addMonths(13)->toDateString());
+        $this->assertEquals('2020-12-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addMonths(-1)->toDateString());
+        $this->assertEquals('2021-01-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addMonths(0)->toDateString());
+    }
+
+    function testAddYears()
+    {
+        $this->assertEquals('2022-01-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addYears(1)->toDateString());
+        $this->assertEquals('2034-01-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addYears(13)->toDateString());
+        $this->assertEquals('2020-01-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addYears(-1)->toDateString());
+        $this->assertEquals('2021-01-01', DateTz::of('2021-01-01', self::DEFAULT_TZ)->addYears(0)->toDateString());
+    }
+
     function isBeforeAndIsAfterDataProvider(): array
     {
         return [
@@ -111,5 +127,26 @@ class DateTzTest extends TestCase
         foreach (['2000-01-01', '1999-12-31'] as $date) {
             $this->assertEquals($date, DateTz::of($date, self::DEFAULT_TZ)->toDateString());
         }
+    }
+
+    public function testDayOfMonth()
+    {
+        $this->assertEquals(1, DateTz::of('2021-02-01', self::DEFAULT_TZ)->dayOfMonth());
+        $this->assertEquals(11, DateTz::of('2021-01-11', self::DEFAULT_TZ)->dayOfMonth());
+        $this->assertEquals(31, DateTz::of('2021-01-31', self::DEFAULT_TZ)->dayOfMonth());
+    }
+
+    public function testMonth()
+    {
+        $this->assertEquals(2, DateTz::of('2021-02-01', self::DEFAULT_TZ)->month());
+        $this->assertEquals(1, DateTz::of('2021-01-11', self::DEFAULT_TZ)->month());
+        $this->assertEquals(12, DateTz::of('2021-12-31', self::DEFAULT_TZ)->month());
+    }
+
+    public function testYear()
+    {
+        $this->assertEquals(2021, DateTz::of('2021-02-01', self::DEFAULT_TZ)->year());
+        $this->assertEquals(2099, DateTz::of('2099-01-11', self::DEFAULT_TZ)->year());
+        $this->assertEquals(1900, DateTz::of('1900-12-31', self::DEFAULT_TZ)->year());
     }
 }
