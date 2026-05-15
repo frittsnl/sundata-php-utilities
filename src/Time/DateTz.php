@@ -85,6 +85,22 @@ class DateTz
         );
     }
 
+    function addMonths(int $months): DateTz
+    {
+        return new DateTz(
+            $this->date->addMonths($months),
+            $this->timezone
+        );
+    }
+
+    function addYears(int $years): DateTz
+    {
+        return new DateTz(
+            $this->date->addYears($years),
+            $this->timezone
+        );
+    }
+
     public function timezone(): string
     {
         return $this->timezone;
@@ -124,5 +140,20 @@ class DateTz
     {
         $this->assertSameTimezone($dateTz);
         return $this->isAfter($dateTz) ? $this : $dateTz;
+    }
+
+    public function dayOfMonth(): int
+    {
+        return $this->date->dayOfMonth();
+    }
+
+    public function month(): int
+    {
+        return $this->date->month();
+    }
+
+    public function year(): int
+    {
+        return $this->date->year();
     }
 }

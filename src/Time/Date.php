@@ -57,6 +57,24 @@ class Date
         );
     }
 
+    function addMonths(int $months): Date
+    {
+        return new Date(
+            CarbonImmutable::parse($this->dateString)
+                ->addMonths($months)
+                ->toDateString()
+        );
+    }
+
+    function addYears(int $years): Date
+    {
+        return new Date(
+            CarbonImmutable::parse($this->dateString)
+                ->addYears($years)
+                ->toDateString()
+        );
+    }
+
     public function isBefore(Date $date): bool
     {
         return $this->toDateString() < $date->toDateString();
@@ -75,5 +93,20 @@ class Date
     public function min(Date $date): Date
     {
         return $this->isBefore($date) ? $this : $date;
+    }
+
+    public function dayOfMonth(): int
+    {
+        return (int)explode('-', $this->toDateString())[2];
+    }
+
+    public function month(): int
+    {
+        return (int)explode('-', $this->toDateString())[1];
+    }
+
+    public function year(): int
+    {
+        return (int)explode('-', $this->toDateString())[0];
     }
 }
