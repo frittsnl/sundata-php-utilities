@@ -38,6 +38,11 @@ class Date
         return CarbonImmutable::parse($this->dateString);
     }
 
+    public function asDateRange(): DateRange
+    {
+        return DateRange::of($this, $this->addDays(1));
+    }
+
     function toString(): string
     {
         return sprintf("Date: %s", $this->dateString);

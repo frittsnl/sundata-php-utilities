@@ -58,6 +58,11 @@ class DateTz
         );
     }
 
+    function asDateRangeTz(): DateRangeTz
+    {
+        return DateRangeTz::of($this, $this->addDays(1));
+    }
+
     function toDateString(): string
     {
         // for convenience
