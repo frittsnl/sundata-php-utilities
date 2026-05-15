@@ -18,12 +18,12 @@ class Irradiance extends Measurement
 
     static function fromkJm2(int $kJm2): Irradiance
     {
-        return new Irradiance(round($kJm2 / 10));
+        return new Irradiance(round($kJm2 / 10, PHP_ROUND_HALF_EVEN));
     }
 
     static function fromWhm2(int $whm2): Irradiance
     {
-        return new Irradiance(round($whm2 * 0.36));
+        return new Irradiance(round($whm2 * 0.36, PHP_ROUND_HALF_EVEN));
     }
 
     function asJcm2(): int
@@ -38,7 +38,7 @@ class Irradiance extends Measurement
 
     function asMJm2(): int
     {
-        return round($this->jcm2 / 100);
+        return round($this->jcm2 / 100, PHP_ROUND_HALF_EVEN);
     }
 
     /** @noinspection PhpPureAttributeCanBeAddedInspection */
@@ -62,6 +62,6 @@ class Irradiance extends Measurement
 
     protected static function fromValue($value): self
     {
-        return Irradiance::fromJcm2((int)$value);
+        return Irradiance::fromJcm2(round($value, PHP_ROUND_HALF_EVEN));
     }
 }
