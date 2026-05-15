@@ -77,7 +77,7 @@ class SunOrientationCalculation {
 
 
     public function toJulian($date, $timezone) {
-        $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date, $timezone);
+        $date = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', (string) $date, $timezone);
         $date->setTimezone('UTC');
         $julianDate = $date->getTimestamp() / daySec - 0.5 + J1970;
         return $julianDate;
