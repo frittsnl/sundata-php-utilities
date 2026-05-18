@@ -1,0 +1,29 @@
+name: test
+on:
+  push:
+  pull_request:
+    types: [ opened, reopened ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [ '8.0','8.1','8.2','8.3','8.4','8.5' ]
+        dependency-version-strategy: [ "--prefer-lowest","--prefer-stable" ]
+    timeout-minutes: 5
+    steps:
+      - uses: frittsnl/github-actions/php-composer-setup@masterc
+        with:
+          php_version: ${{ matrix.php-versions }}
+          sd_github_access_token: ''
+          composer_install_options: --no-progress --prefer-dist --optimize-autoloader ${{ matrix.dependency-version-strategy }}
+      - uses: frittsnl/github-actions/phpunit-run@master
+
+  test_success:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Release new package on private Satis/Composer
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        run: wget https://packages.sddns.nl/admin/satis/buildRun
