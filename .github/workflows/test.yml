@@ -13,7 +13,7 @@ jobs:
         dependency-version-strategy: [ "--prefer-lowest","--prefer-stable" ]
     timeout-minutes: 5
     steps:
-      - uses: frittsnl/github-actions/php-composer-setup@masterc
+      - uses: frittsnl/github-actions/php-composer-setup@master
         with:
           php_version: ${{ matrix.php-versions }}
           sd_github_access_token: ''
